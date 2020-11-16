@@ -115,7 +115,21 @@
         <li>感性生活</li>
         <li>财富自由</li>
       </div>
-      <div class="article_list">list</div>
+      <div id="host_article" class="article_list">
+        <div>
+          <h3>热门文章</h3>
+          <a class="more" href="#">More</a>
+        </div>
+        <li><span class="group_num1">1</span><h3>适合做logo的字体有哪些?</h3></li>
+        <li><span class="group_num2">2</span><h3>朋友的“局”</h3></li>
+        <li><span class="group_num3">3</span><h3>农村的另类奇怪现象</h3></li>
+        <li><span class="group_num4">4</span><h3>谈谈“B端C端化”</h3></li>
+        <li><span class="group_num5">5</span><h3>做好自己</h3></li>
+        <li><span class="group_num6">6</span><h3>且以优雅过一生</h3></li>
+        <li><span class="group_num7">7</span><h3>请记住杨绛先生的这4句话（深度文字）</h3></li>
+        <li><span class="group_num8">8</span><h3>村上春树的那些扎心语录！请细细品味！</h3></li>
+        <li><span class="group_num9">9</span><h3>呼兰河 ，萧红一生回不去的故乡</h3></li>
+      </div>
     </div>
 
     <div class="black_colore black_footer">
@@ -338,7 +352,7 @@ body{
   margin: 10px;
 }
 
-#classify .more {
+.more {
   float: right;
   text-decoration-line: none;
   display: block;
@@ -355,6 +369,127 @@ body{
   font-size: 14px;
   border-bottom: 1px solid #797979;
   padding: 5px;
+}
+
+#host_article > li{
+  margin: 10px 10px;
+  list-style: none;
+}
+
+#host_article > li > h3{
+  color: #333333;
+  font-size: 14px;
+  font-weight: normal;
+  margin: 0px auto 0px 20px;
+}
+
+.group_num1{
+  font-size: 10px;
+  color: #FFFFFF;
+  border-radius: 2px;
+  width: 16px;
+  height: 17px;
+  background-color: #1E90FF;
+  float: left;
+}
+.group_num1{
+  font-size: 10px;
+  color: #FFFFFF;
+  border-radius: 2px;
+  width: 16px;
+  height: 17px;
+  background-color: #1E90FF;
+  float: left;
+  text-align: center;
+  line-height: 18px;
+}
+.group_num2{
+  font-size: 10px;
+  color: #FFFFFF;
+  border-radius: 2px;
+  width: 16px;
+  height: 17px;
+  background-color: #1E90FF;
+  float: left;
+  text-align: center;
+  line-height: 18px;
+}
+.group_num3{
+  font-size: 10px;
+  color: #FFFFFF;
+  border-radius: 2px;
+  width: 16px;
+  height: 17px;
+  background-color: #1E90FF;
+  float: left;
+  text-align: center;
+  line-height: 18px;
+}
+.group_num4{
+  float: left;
+  font-size: 10px;
+  color: #333333;
+  border-radius: 2px;
+  width: 16px;
+  height: 17px;
+  background-color:#F1F2F6 ;
+  text-align: center;
+  line-height: 18px;
+}
+.group_num5{
+  float: left;
+  font-size: 10px;
+  color: #333333;
+  border-radius: 2px;
+  width: 16px;
+  height: 17px;
+  background-color:#F1F2F6 ;
+  text-align: center;
+  line-height: 18px;
+}
+.group_num6{
+  float: left;
+  font-size: 10px;
+  color: #333333;
+  border-radius: 2px;
+  width: 16px;
+  height: 17px;
+  background-color:#F1F2F6 ;
+  text-align: center;
+  line-height: 18px;
+}
+.group_num7{
+  float: left;
+  font-size: 10px;
+  color: #333333;
+  border-radius: 2px;
+  width: 16px;
+  height: 17px;
+  background-color:#F1F2F6 ;
+  text-align: center;
+  line-height: 18px;
+}
+.group_num8{
+  float: left;
+  font-size: 10px;
+  color: #333333;
+  border-radius: 2px;
+  width: 16px;
+  height: 17px;
+  background-color:#F1F2F6 ;
+  text-align: center;
+  line-height: 18px;
+}
+.group_num9{
+  float: left;
+  font-size: 10px;
+  color: #333333;
+  border-radius: 2px;
+  width: 16px;
+  height: 17px;
+  background-color:#F1F2F6 ;
+  text-align: center;
+  line-height: 18px;
 }
 
 .black_footer{
