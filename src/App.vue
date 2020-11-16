@@ -3,7 +3,7 @@
 
     <div class="black_colore">
       <div class="harder_body">
-        <div class="harder_logo">Wenwen</div>
+        <h3 class="harder_logo">Wenwen</h3>
 
         <ul>
           <li>首页</li>
@@ -103,10 +103,43 @@
 
       </div>
 
+      <div id="classify" class="article_list">
+        <div>
+          <h3>分类</h3>
+          <a class="more" href="#">More</a>
+        </div>
+        <li>前后端分离之前端</li>
+        <li>前后端分离之后端</li>
+        <li>我再也没有对你生气</li>
+        <li>数据库</li>
+        <li>感性生活</li>
+        <li>财富自由</li>
+      </div>
       <div class="article_list">list</div>
     </div>
 
     <div class="black_colore black_footer">
+      <ul>
+        <li>
+          <img src="./assets/header001.jpg" alt="">
+          <h3>个人公众号</h3>
+        </li>
+        <li>
+          <h3>我的站外链接</h3>
+          <p>CSDN:<a href="https://blog.csdn.net/weixin_42119415">文文的博客</a></p>
+        </li>
+        <li>
+          <h3>联系我</h3>
+          <p>Email:wenleiwang@126.com</p>
+          <p>QQ:1052833104</p>
+        </li>
+        <li>
+          <h3>文文</h3>
+          <p>性格开朗，恪守勤勉，礼仪仁孝，</p>
+            <p>坚毅勇敢，敏而好学，谦虚明理。</p>
+            <p>校训：博学躬行、尚志明德</p>
+          </li>
+      </ul>
     </div>
   </div>
 
@@ -123,6 +156,7 @@ export default {
 body{
   margin: 0px;
   padding: 0px;
+  font-family: Microsoft YaHei;
 }
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -189,7 +223,7 @@ body{
 
 .content_body{
   margin: 5px auto;
-  width: 70%;
+  width: 60%;
   height: 100%;
 }
 
@@ -207,7 +241,7 @@ body{
 
 .blog_content{
   margin: 5px auto;
-  width: 70%;
+  width: 60%;
   height: 100%;
   float: left;
   border-radius: 5px;
@@ -282,18 +316,82 @@ body{
 }
 
 .article_list{
-  margin: 5px;
+  margin: 5px auto;
   float: right;
-  width: 27%;
+  width: 400px;
   border-radius: 5px;
   background-color: #FFFFFF;
   box-shadow: 1px 1px 5px#a4b0be;
-  padding: 10px;
+}
+
+.article_list > div {
+  position: relative;
+  width: 100%;
+  height: 45px;
+  background: #DFE4EA;
+}
+
+.article_list > div > h3{
+  font-size: 18px;
+  color: #2F3542;
+  float: left;
+  margin: 10px;
+}
+
+#classify .more {
+  float: right;
+  text-decoration-line: none;
+  display: block;
+  position: relative;
+  margin: 10px;
+  right: 10px;
+  color: #2ED573;
+}
+
+#classify > li {
+  margin: 10px 10px;
+  list-style: none;
+  color: #333333;
+  font-size: 14px;
+  border-bottom: 1px solid #797979;
+  padding: 5px;
 }
 
 .black_footer{
   height: 357px;
   float: left;
   margin: 10px auto 0px auto;
+}
+
+.black_footer > ul{
+  margin: 70px auto;
+  width: 960px;
+  height: 200px;
+  border-bottom: 1px solid #797979;
+}
+
+.black_footer > ul > li{
+  position: relative;
+  list-style: none;
+  float: left;
+  height: 150px;
+  width: 240px;
+  text-align: center;
+}
+
+.black_footer > ul > li > img{
+  height: 104px;
+  width: 104px;
+  background-size: 100% 100%;
+}
+
+.black_footer > ul > li > h3{
+  color: #CED6E0;
+  font-size: 18px;
+  font-family: Microsoft YaHei;
+}
+.black_footer > ul > li > p{
+  font-size: 14px;
+  color: #A4B0BE;
 }
 </style>
