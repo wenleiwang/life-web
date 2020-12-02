@@ -4,6 +4,7 @@ import HelloWorld from '@/components/HelloWorld'
 import Myfirst from '@/components/myfirst'
 import adminIndex from '@/components/admin/adminIndex'
 
+
 Vue.use(Router)
 
 export default new Router({

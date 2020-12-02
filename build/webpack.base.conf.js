@@ -13,8 +13,7 @@ function resolve (dir) {
 module.exports = {
   context: path.resolve(__dirname, '../'),
   entry: {
-    app: './src/main.js',
-    adminIndex: './src/js/adminIndex.js'//新添加页面
+    app: './src/main.js'
   },
   output: {
     path: config.build.assetsRoot,

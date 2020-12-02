@@ -40,8 +40,7 @@ module.exports = {
     // Template for index.html
     index: path.resolve(__dirname, '../dist/index.html'),
     
-    //新添加页面
-    index: path.resolve(__dirname, '../dist/admin.html'),
+
 
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),

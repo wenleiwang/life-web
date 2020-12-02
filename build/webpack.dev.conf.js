@@ -58,13 +58,6 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       inject: true
     }),
 
-    //新添加页面
-    new HtmlWebpackPlugin({
-      filename: 'admin.html',
-      template: 'admin.html',
-      inject: true,
-    }),
-
     // copy custom static assets
     new CopyWebpackPlugin([
       {
