@@ -1,26 +1,23 @@
 <template>
-    <div id="editor">
-        <mavon-editor style="height: 100%"></mavon-editor>
+    <div>
+        <h1>user</h1>
+       <!-- 这里可以通过$route.params.name来获取路由的参数 -->
+        <p>欢迎回来,{{$route.params.name}}</p>
     </div>
 </template>
-
 <script>
-// Local Registration
-import { mavonEditor } from 'mavon-editor'
-import 'mavon-editor/dist/css/index.css'
-export default {
-    name: 'editor',
-    components: {
-        mavonEditor
-        // or 'mavon-editor': mavonEditor
+    export default {
+        data () {
+            return {
+                msg: ""
+            }
+        },
+        watch:{
+            //to表示即将要进入的那个组件，from表示从哪个组件过来的
+            $route(to,from){
+                this.msg = to.params.name
+                console.log(111);
+            }
+        }
     }
-}
 </script>
-
-<style scoped>
-#editor {
-        margin: auto;
-        width: 80%;
-        height: 580px;
-    }
-</style>
