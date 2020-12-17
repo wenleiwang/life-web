@@ -10,6 +10,11 @@
             return {
                 msg: "我是page2组件"
             }
+        },
+        methods:{
+            goBack() {
+                window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/page1')
+            }
         }
     }
 </script>
