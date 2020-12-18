@@ -1,16 +1,22 @@
 <template>
     <div>
+        <Vheader></Vheader>
         <h1>user</h1>
        <!-- 这里可以通过$route.params.name来获取路由的参数 -->
         <p>欢迎回来,{{$route.params.name}}</p>
     </div>
+
 </template>
 <script>
+import Vheader from '../vheader.vue'
     export default {
         data () {
             return {
                 msg: ""
             }
+        },
+        components:{
+            Vheader
         },
         watch:{
             //to表示即将要进入的那个组件，from表示从哪个组件过来的

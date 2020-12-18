@@ -17,7 +17,17 @@ import show from '@/components/show.vue'
 const routes=[
   {
     path : '/',
-    component:show
+    component:show,
+    /* children:[
+      {
+        path:'/admin/index',
+        component:adminIndex
+      }
+    ] */
+  },
+  {
+    path:'/admin/index',
+    component:adminIndex
   },
   // 单个路由均为对象类型，path代表的是路径，component代表的是组件
   {path:'/admin/:name',component:adminIndex},

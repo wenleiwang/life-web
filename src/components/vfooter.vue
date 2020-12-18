@@ -3,7 +3,7 @@
       <ul>
         <li>
           <img src="../assets/header001.jpg" alt="">
-          <h3>个人公众号</h3>
+          <h3><router-link to="/admin/index">个人公众号</router-link></h3>
         </li>
         <li>
           <h3>我的站外链接</h3>
@@ -16,7 +16,7 @@
         </li>
         <li>
           <h3>文文</h3>
-          <p>性格开朗，恪守勤勉，礼仪仁孝，</p>
+            <p>性格开朗，恪守勤勉，礼仪仁孝，</p>
             <p>坚毅勇敢，敏而好学，谦虚明理。</p>
             <p>校训：博学躬行、尚志明德</p>
           </li>
