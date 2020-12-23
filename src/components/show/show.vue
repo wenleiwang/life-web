@@ -11,15 +11,15 @@
             <h3>java的进阶</h3>
             <p>人总是要有些奋斗的目标的,暂且以此篇作为我而后一年的开端,思索一下接下去的学习之路。 </p>
             <div class="article_info">
-              <img src="../assets/header001.jpg" alt="">
+              <img src="../../assets/header001.jpg" alt="">
               <p>文文</p>
               <p>2020-11-14</p>
-              <img src="../assets/see.png" alt="">
+              <img src="./../assets/see.png" alt="">
               <p>121</p>
             </div>
           </div>
           <div class="article_pic">
-            <img src="../assets/header001.jpg" alt="">
+            <img src="../../assets/header001.jpg" alt="">
           </div>
         </div>
 
@@ -29,15 +29,15 @@
             <h3>java的进阶</h3>
             <p>人总是要有些奋斗的目标的,暂且以此篇作为我而后一年的开端,思索一下接下去的学习之路。 </p>
             <div class="article_info">
-              <img src="../assets/header001.jpg" alt="">
+              <img src="../../assets/header001.jpg" alt="">
               <p>文文</p>
               <p>2020-11-14</p>
-              <img src="../assets/see.png" alt="">
+              <img src="../../assets/see.png" alt="">
               <p>121</p>
             </div>
           </div>
           <div class="article_pic">
-            <img src="../assets/header001.jpg" alt="">
+            <img src="../../assets/header001.jpg" alt="">
           </div>
         </div>
 
@@ -48,15 +48,15 @@
             <h3>java的进阶</h3>
             <p>人总是要有些奋斗的目标的,暂且以此篇作为我而后一年的开端,思索一下接下去的学习之路。 </p>
             <div class="article_info">
-              <img src="../assets/header001.jpg" alt="">
+              <img src="../../assets/header001.jpg" alt="">
               <p>文文</p>
               <p>2020-11-14</p>
-              <img src="../assets/see.png" alt="">
+              <img src="../../assets/see.png" alt="">
               <p>121</p>
             </div>
           </div>
           <div class="article_pic">
-            <img src="../assets/header001.jpg" alt="">
+            <img src="../../assets/header001.jpg" alt="">
           </div>
         </div>
 
@@ -70,15 +70,15 @@
               人总是要有些奋斗的目标的,fasdf,思索一下接下去的学习之路。
                </p>
             <div class="article_info">
-              <img src="../assets/header001.jpg" alt="">
+              <img src="../../assets/header001.jpg" alt="">
               <p>文文</p>
               <p>2020-11-14</p>
-              <img src="../assets/see.png" alt="">
+              <img src="../../assets/see.png" alt="">
               <p>121</p>
             </div>
           </div>
           <div class="article_pic">
-            <img src="../assets/header001.jpg" alt="">
+            <img src="../../assets/header001.jpg" alt="">
           </div>
         </div>
 
@@ -153,7 +153,7 @@ body{
   width: 100%;
   _height: 500px;
   min-height: 500px;
-  background-image: url(../assets/002.jpg);
+  background-image: url(../../assets/002.jpg);
   background-size: 100% 100%;
   border-radius: 10px ;
 }
