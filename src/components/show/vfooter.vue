@@ -2,7 +2,7 @@
     <div class="black_colore black_footer">
       <ul>
         <li>
-          <img src="../assets/header001.jpg" alt="">
+          <img src="../../assets/header001.jpg" alt="">
           <h3><router-link to="/admin/index">个人公众号</router-link></h3>
         </li>
         <li>

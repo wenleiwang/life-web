@@ -14,7 +14,7 @@
               <img src="../../assets/header001.jpg" alt="">
               <p>文文</p>
               <p>2020-11-14</p>
-              <img src="./../assets/see.png" alt="">
+              <img src="../../assets/see.png" alt="">
               <p>121</p>
             </div>
           </div>
@@ -119,8 +119,8 @@
 </template>
 
 <script>
-import vheader from '@/components/vheader'
-import vfooter from '@/components/vfooter'
+import vheader from '@/components/show/vheader'
+import vfooter from '@/components/show/vfooter'
 export default {
   name: 'show',
   components :{

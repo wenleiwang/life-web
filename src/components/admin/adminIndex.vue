@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Vheader></Vheader>
+        <!-- <Vheader></Vheader> -->
         <h1>user</h1>
        <!-- 这里可以通过$route.params.name来获取路由的参数 -->
         <p>欢迎回来,{{$route.params.name}}</p>
@@ -22,13 +22,13 @@
                 </tr>
             </table>
         </div>
-        <Vfooter></Vfooter>
+        <!-- <Vfooter></Vfooter> -->
     </div>
 
 </template>
 <script>
-import Vheader from '../vheader.vue'
-import Vfooter from '../vfooter'
+// import Vheader from '../vheader.vue'
+// import Vfooter from '../vfooter'
     export default {
         data () {
             return {
@@ -36,7 +36,7 @@ import Vfooter from '../vfooter'
             }
         },
         components:{
-            Vheader,Vfooter
+            // Vheader,Vfooter
         },
         watch:{
             //to表示即将要进入的那个组件，from表示从哪个组件过来的

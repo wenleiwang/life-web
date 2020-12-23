@@ -7,32 +7,21 @@ Vue.use(VueRouter)
 
 import VueRouter from 'vue-router'
 // 引入模板
-import page1 from '@/components/admin/adminRedact.vue'
-import page2 from '@/components/admin/adminInfo.vue'
+
 import adminIndex from '@/components/admin/adminIndex'
-import show from '@/components/show.vue'
+import show from '@/components/show/show.vue'
 
 
 // 定义routes路由的集合，数组类型
 const routes=[
   {
     path : '/',
-    component:show,
-    /* children:[
-      {
-        path:'/admin/index',
-        component:adminIndex
-      }
-    ] */
+    component:show
   },
   {
     path:'/admin/index',
     component:adminIndex
-  },
-  // 单个路由均为对象类型，path代表的是路径，component代表的是组件
-  {path:'/admin/:name',component:adminIndex},
-  // // 可以配置重定向
-  {path:'/page2',component:page2}
+  }
 ]
 
 const router = new VueRouter({
