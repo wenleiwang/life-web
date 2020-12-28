@@ -8,8 +8,11 @@ Vue.use(VueRouter)
 import VueRouter from 'vue-router'
 // 引入模板
 
+
 import adminIndex from '@/components/admin/adminIndex'
 import show from '@/components/show/show.vue'
+import indexList from '@/components/admin/indexList.vue'
+import adminRedact from '@/components/admin/adminRedact.vue'
 
 
 // 定义routes路由的集合，数组类型
@@ -21,6 +24,14 @@ const routes=[
   {
     path:'/admin/index',
     component:adminIndex
+  },
+  {
+    path:'/admin/indexList',
+    component:indexList
+  },
+  {
+    path:'/admin/adminRedact',
+    component:adminRedact
   }
 ]
 
@@ -29,4 +40,5 @@ const router = new VueRouter({
   routes,
   mode: 'history'
 })
+
 export default router
