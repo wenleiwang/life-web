@@ -15,6 +15,7 @@
             <mavon-editor v-model="push.articleBody" ref="md" @imgAdd="imgAdd" @imgDel="imgDel" />
         </div>
         <div>{{push.articleBody}}</div>
+        <div>{{push.articleName}}</div>
 
     </div>
 </template>
@@ -33,7 +34,7 @@ export default {
                 articleImgUrl: "",
                 articleName: "",
                 classifyIdList: [
-                    0
+                    1
                 ],
                 collectStatus: true,
                 commentStatus: true,
@@ -67,13 +68,33 @@ export default {
         },
         updateArticle(){
             alert("点击了")
+            var add = {
+                articleBody: "",
+                articleDescription: "",
+                articleFlag: 0,
+                articleImgUrl: "",
+                articleName: "",
+                classifyIdList: [
+                    1
+                ],
+                collectStatus: true,
+                commentStatus: true,
+                starStatus: true
+            }
+            add.articleBody = this.push.articleBody
+            add.articleDescription = this.push.articleDescription
+            add.articleFlag = this.push.articleFlag
+            add.articleImgUrl = this.push.articleImgUrl
+            add.articleName = this.push.articleName
+            add.classifyIdList = this.push.classifyIdList
+            add.collectStatus =  this.push.collectStatus
+            add.commentStatus = this.push.commentStatus
+            add.starStatus = this.push.starStatus
+            document.cookie="user_info=1;path = /"
             this.$axios({
                 url :'/admin/updateArticle',
                 method : 'post',
-                data: this.push,
-                headers:{
-                    'user_info': 1
-                }
+                data: add
             }).then((url) => {
                 if(url.data.Result == 1){
                     alert(url.data.Message)

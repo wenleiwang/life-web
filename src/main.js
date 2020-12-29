@@ -15,6 +15,7 @@ axios.get();
 
 Vue.prototype.$axios = axios;
 axios.defaults.headers.common["token"] = ""
+axios.defaults.withCredentials = true
 // axios.defaults.headers.post["Content-type"] = "application/json"
 axios.defaults.baseURL = '/api' //设置统一路径前缀
 
