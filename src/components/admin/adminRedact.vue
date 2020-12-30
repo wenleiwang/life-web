@@ -2,7 +2,7 @@
     <div>
         <div class="leftMenu">
             <li>保存</li>
-            <li>预览</li>
+            <li @click="seeArticle">预览</li>
             <li @click="updateArticle">发布</li>
         </div>
 
@@ -11,7 +11,6 @@
                 <p>文章标题</p>
                 <input type="text" v-model="push.articleName">
             </div>
-            <!-- <mavon-editor style="height: 100%"></mavon-editor> -->
             <mavon-editor v-model="push.articleBody" ref="md" @imgAdd="imgAdd" @imgDel="imgDel" />
         </div>
         <div>{{push.articleBody}}</div>
@@ -67,7 +66,6 @@ export default {
             delete this.imgFile[pos]
         },
         updateArticle(){
-            alert("点击了")
             var add = {
                 articleBody: "",
                 articleDescription: "",
@@ -102,6 +100,9 @@ export default {
                     alert(url.data.Message)
                 }
             })
+        },
+        seeArticle(){
+            this.$router.replace('/admin/adminRedact')
         }
 
     }

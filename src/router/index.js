@@ -11,8 +11,10 @@ import VueRouter from 'vue-router'
 
 import adminIndex from '@/components/admin/adminIndex'
 import show from '@/components/show/show.vue'
+import seeArticle from '@/components/show/seeArticle.vue'
 import indexList from '@/components/admin/indexList.vue'
 import adminRedact from '@/components/admin/adminRedact.vue'
+
 
 
 // 定义routes路由的集合，数组类型
@@ -32,6 +34,10 @@ const routes=[
   {
     path:'/admin/adminRedact',
     component:adminRedact
+  },
+  {
+    path:'/show/seeArticle',
+    component:seeArticle
   }
 ]
 
