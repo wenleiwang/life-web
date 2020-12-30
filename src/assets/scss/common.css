@@ -3,4 +3,5 @@ html,body{
     padding: 0px;
     font-family: Microsoft YaHei;
     height: 100%;
+    box-sizing: border-box;
 }

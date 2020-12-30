@@ -57,34 +57,36 @@ body{
   padding: 0px;
   font-family: Microsoft YaHei;
   background: #f1f2f6;
-display: inline-block;
+  box-sizing: border-box;
 }
 .seeArticle{
-    text-align: center;
+    width:100%;
+    
 }
-.seeArticle .inner{
-    display: inline-block;
+.inner{
+    
+    width: 90%;
     margin: 20px auto;
 }
 .opt{
     float: left;
-    margin: 20px auto;
+    width: 10%;
 }
 .markedArticle{
     background: #ffffff;
     width: 60%;
     border-radius: 1em;
-    /* padding: 20px; */
+    padding: 20px;
+    margin: 0 0 0 100px;
     float: left;
-    margin: 20px auto;
 }
 .toc{
-    float: left;
-    margin: 20px auto;
-    width: 15%;
-    height: 500px;
+    width: 20%;
+    height: 200px;
     background: red;
     border-radius: 1em;
+    margin: 0 0 0 20px;
+    float: left;
 }
 
 </style>
