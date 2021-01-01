@@ -33,11 +33,12 @@ export default {
                 articleImgUrl: "",
                 articleName: "",
                 classifyIdList: [
-                    1
+                    
                 ],
                 collectStatus: true,
                 commentStatus: true,
-                starStatus: true
+                starStatus: true,
+                deleted : 0
             }
         }
     },
@@ -66,43 +67,38 @@ export default {
             delete this.imgFile[pos]
         },
         updateArticle(){
-            var add = {
-                articleBody: "",
-                articleDescription: "",
-                articleFlag: 0,
-                articleImgUrl: "",
-                articleName: "",
-                classifyIdList: [
-                    1
-                ],
-                collectStatus: true,
-                commentStatus: true,
-                starStatus: true
-            }
-            add.articleBody = this.push.articleBody
-            add.articleDescription = this.push.articleDescription
-            add.articleFlag = this.push.articleFlag
-            add.articleImgUrl = this.push.articleImgUrl
-            add.articleName = this.push.articleName
-            add.classifyIdList = this.push.classifyIdList
-            add.collectStatus =  this.push.collectStatus
-            add.commentStatus = this.push.commentStatus
-            add.starStatus = this.push.starStatus
+            this.push.deleted=0
             document.cookie="user_info=1;path = /"
             this.$axios({
                 url :'/admin/updateArticle',
                 method : 'post',
-                data: add
+                data: this.push
             }).then((url) => {
                 if(url.data.Result == 1){
                     alert(url.data.Message)
+                    this.push.articleId = url.data.Data
                 }else{
                     alert(url.data.Message)
                 }
             })
         },
         seeArticle(){
-            this.$router.replace('/admin/adminRedact')
+            this.push.deleted=2
+            document.cookie="user_info=1;path = /"
+            this.$axios({
+                url :'/admin/updateArticle',
+                method : 'post',
+                data: this.push
+            }).then((url) => {
+                if(url.data.Result == 1){
+                    this.push.articleId = url.data.Data
+                    var id = this.push.articleId
+                    this.$router.push({name : 'seeArticle' , query:{id}})
+                }else{
+                    alert(url.data.Message)
+                }
+            })
+            
         }
 
     }

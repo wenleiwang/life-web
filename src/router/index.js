@@ -36,8 +36,25 @@ const routes=[
     component:adminRedact
   },
   {
+    name : 'seeArticle',
     path:'/show/seeArticle',
-    component:seeArticle
+    component:seeArticle,
+    beforeRouteUpdate  : (to,from,next) => {
+      debugger
+      document.cookie="user_info=1;path = /"
+      this.$axios({
+        url :'/admin/getArticle',
+        method : 'get',
+        data: this.push
+    }).then((url) => {
+        if(url.data.Result == 1){
+          this.article = url.data.Data.articleBody
+          debugger
+        }else{
+            alert(url.data.Message)
+        }
+    })
+    }
   }
 ]
 
