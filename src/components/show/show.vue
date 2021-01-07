@@ -4,84 +4,42 @@
     <div class="content_body">
       <div class="content_pic">这里是pic</div>
       <div class="blog_content">
-
-        <div class="article_item">
+        <!-- 循环列表 -->
+        <div class="article_item" v-for="item in list" :key="item.articleId" @click="seeArticle(item.articleId)">
           <div class="article_content">
             <button>原创</button>
-            <h3>java的进阶</h3>
-            <p>人总是要有些奋斗的目标的,暂且以此篇作为我而后一年的开端,思索一下接下去的学习之路。 </p>
+            <h3>{{item.articleName}}</h3>
+            <p>{{item.articleDescription}}</p>
             <div class="article_info">
               <img src="../../assets/header001.jpg" alt="">
               <p>文文</p>
-              <p>2020-11-14</p>
-              <img src="../../assets/see.png" alt="">
-              <p>121</p>
+              <p>{{item.updateTime}}</p>
+              <img src="../../assets/see.png" alt="首图">
+              <p>{{item.starNum}}</p>
             </div>
           </div>
           <div class="article_pic">
-            <img src="../../assets/header001.jpg" alt="">
+            <img :src="item.articleImgUrl" alt="">
           </div>
+        </div><!-- end循环列表 -->
+        
+        <!--  分页小标-->
+        <div class="page_item">
+          <div  class="page_item_float">
+            <el-pagination
+              background
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page.sync="currentPage"
+              :page-sizes="[100, 200, 300, 400]"
+              :page-size="100"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="400">
+            </el-pagination>
+          </div>
+          
         </div>
-
-        <div class="article_item">
-          <div class="article_content">
-            <button>原创</button>
-            <h3>java的进阶</h3>
-            <p>人总是要有些奋斗的目标的,暂且以此篇作为我而后一年的开端,思索一下接下去的学习之路。 </p>
-            <div class="article_info">
-              <img src="../../assets/header001.jpg" alt="">
-              <p>文文</p>
-              <p>2020-11-14</p>
-              <img src="../../assets/see.png" alt="">
-              <p>121</p>
-            </div>
-          </div>
-          <div class="article_pic">
-            <img src="../../assets/header001.jpg" alt="">
-          </div>
-        </div>
-
-
-        <div class="article_item">
-          <div class="article_content">
-            <button>原创</button>
-            <h3>java的进阶</h3>
-            <p>人总是要有些奋斗的目标的,暂且以此篇作为我而后一年的开端,思索一下接下去的学习之路。 </p>
-            <div class="article_info">
-              <img src="../../assets/header001.jpg" alt="">
-              <p>文文</p>
-              <p>2020-11-14</p>
-              <img src="../../assets/see.png" alt="">
-              <p>121</p>
-            </div>
-          </div>
-          <div class="article_pic">
-            <img src="../../assets/header001.jpg" alt="">
-          </div>
-        </div>
-
-
-        <div class="article_item">
-          <div class="article_content">
-            <button>原创</button>
-            <h3>java的进阶</h3>
-            <p>人总是要有些奋斗的目标的,暂且以此篇作为我而后一年的开safd端,思索一下接下去的学习之路。
-              人sfdasdvas斗的目标的,暂且以此篇作为我而后一年afsdfasdf的开端,思索一下接下去的学习之路。
-              人总是要有些奋斗的目标的,fasdf,思索一下接下去的学习之路。
-               </p>
-            <div class="article_info">
-              <img src="../../assets/header001.jpg" alt="">
-              <p>文文</p>
-              <p>2020-11-14</p>
-              <img src="../../assets/see.png" alt="">
-              <p>121</p>
-            </div>
-          </div>
-          <div class="article_pic">
-            <img src="../../assets/header001.jpg" alt="">
-          </div>
-        </div>
-
+        
       </div>
 
       <div id="classify" class="article_list">
@@ -123,9 +81,74 @@ import vheader from '@/components/show/vheader'
 import vfooter from '@/components/show/vfooter'
 export default {
   name: 'show',
+  data(){
+    return {
+      list :[],
+      pageNum:1,
+      pageSize:20,
+      currentPage: 1
+    }
+  },
+  created (){
+    // 组件创建完后获取数据，
+    // 此时 data 已经被 observed 了
+    this.listArticle(1)
+  },
+  watch: {
+    // 如果路由有变化，会再次执行该方法
+    '$route': 'listArticle'
+  },
   components :{
     vheader,
     vfooter
+  },
+  methods :{
+    listArticle(page){
+      this.$axios.get('/listArticle',{
+        params:{
+          search:'',
+          pageNum:page,
+          pageSize:20
+        }
+      }).then((url) => {
+        if(url.data.Result == 1){
+          this.list = url.data.Data
+          var total = url.data.TotalCount
+          var maxPage = parseInt(total / this.pageSize)
+          if(total % this.pageSize > 0){
+            maxPage ++;
+          }
+          var pageList ="";
+          var firstHtml = "<span class='page_false' @click='listArticle(1)'>First</span>"
+          var lastHtml = "<span class='page_false' @click='listArticle(" + maxPage + ")'>Last</span>"
+          var pageHtml = ""
+          pageList += firstHtml;
+
+          var start = (this.pageNum -2) > 0 ? (this.pageNum - 2) : 1;
+          var end = (maxPage - this.pageNum) > 2 ? (this.pageNum + 2) : maxPage;
+
+          for(var i = start ; i <= end ; i++){
+            if(i == this.pageNum){
+             pageList += "<span class='page_true' @click='listArticle("+ i +")'>"+ i +"</span>";
+            }else{
+              pageList += "<span class='page_false' @click='listArticle("+ i +")'>"+ i +"</span>";
+            }
+          }
+          pageList += lastHtml;
+        }else{
+          alert(url.data.Message)
+        }
+      })
+    },
+    seeArticle(id){
+      this.$router.push({name : 'seeArticle' , query:{id}})
+    },
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+    }
   }
 }
 </script>
@@ -167,12 +190,16 @@ body{
   background-color: #FFFFFF;
   box-shadow: 1px 1px 5px #a4b0be;
   padding: 0px 10px 0px 10px;
+  position:relative;
 }
 
 .article_item{
   width: 100%;
-  margin: 10px auto;
+  margin: 15px auto;
   float: left;
+}
+.article_item:hover{
+  cursor: pointer;
 }
 
 .article_content > button{
@@ -232,6 +259,7 @@ body{
   border-radius: 5px;
   width: 150px;
   height: 92px;
+  margin: 0 20px;
 }
 
 .article_list{
@@ -255,6 +283,16 @@ body{
   color: #2F3542;
   float: left;
   margin: 10px;
+}
+
+.page_item{
+  width:80%;
+  margin: 0 auto ;
+  background: green;
+}
+.page_item_float{
+  margin: 10px auto;
+  float: left;
 }
 
 .more {

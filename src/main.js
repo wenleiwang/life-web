@@ -18,11 +18,15 @@ axios.defaults.withCredentials = true
 // axios.defaults.headers.post["Content-type"] = "application/json"
 axios.defaults.baseURL = '/api' //设置统一路径前缀
 
-
+// 导入markdown
 import  mavonEditor  from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
 Vue.use(mavonEditor)
 
+// 导入Element中的分页
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+Vue.use(ElementUI)
 
 /* eslint-disable no-new */
 new Vue({
