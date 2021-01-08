@@ -4,15 +4,15 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import axios from 'axios'
+import VueAxios from 'vue-axios'
 
 import './assets/scss/common.css'
 
 Vue.config.productionTip = false
-// Vue.use(VueAxios, axios)
-axios.get();
+Vue.use(VueAxios, axios)
 
 
-Vue.prototype.$axios = axios;
+// Vue.prototype.$axios = axios; 改用VueAxios绑定
 axios.defaults.headers.common["token"] = ""
 axios.defaults.withCredentials = true
 // axios.defaults.headers.post["Content-type"] = "application/json"

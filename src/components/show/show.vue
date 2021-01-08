@@ -7,7 +7,11 @@
         <!-- 循环列表 -->
         <div class="article_item" v-for="item in list" :key="item.articleId" @click="seeArticle(item.articleId)">
           <div class="article_content">
-            <button>原创</button>
+            <button v-bind:class="{'btn_danger' : item.articleFlag == 0,
+                                   'btn_warn' : item.articleFlag == 1,
+                                   'btn_success' : item.articleFlag == 2}">
+              {{ options[item.articleFlag]['label'] }}
+            </button>
             <h3>{{item.articleName}}</h3>
             <p>{{item.articleDescription}}</p>
             <div class="article_info">
@@ -31,10 +35,10 @@
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
               :current-page.sync="currentPage"
-              :page-sizes="[100, 200, 300, 400]"
-              :page-size="100"
+              :page-sizes="[20, 40, 60, 100]"
+              :page-size="pageSize"
               layout="total, sizes, prev, pager, next, jumper"
-              :total="400">
+              :total="articleTotal">
             </el-pagination>
           </div>
           
@@ -84,15 +88,29 @@ export default {
   data(){
     return {
       list :[],
-      pageNum:1,
       pageSize:20,
-      currentPage: 1
+      currentPage: 1,
+      articleTotal:0,
+      options: [
+        {
+            value: "0",
+            label: "原创"
+        },
+        {
+            value: "1",
+            label: "转载"
+        },
+        {
+            value: "2",
+            label: "翻译"
+        }
+      ]
     }
   },
   created (){
     // 组件创建完后获取数据，
     // 此时 data 已经被 observed 了
-    this.listArticle(1)
+    this.listArticle()
   },
   watch: {
     // 如果路由有变化，会再次执行该方法
@@ -103,40 +121,21 @@ export default {
     vfooter
   },
   methods :{
-    listArticle(page){
-      this.$axios.get('/listArticle',{
+    listArticle(){
+      this.axios.get('/listArticle',{
+        
         params:{
           search:'',
-          pageNum:page,
-          pageSize:20
+          pageNum:this.currentPage,
+          pageSize:this.pageSize
         }
-      }).then((url) => {
-        if(url.data.Result == 1){
-          this.list = url.data.Data
-          var total = url.data.TotalCount
-          var maxPage = parseInt(total / this.pageSize)
-          if(total % this.pageSize > 0){
-            maxPage ++;
-          }
-          var pageList ="";
-          var firstHtml = "<span class='page_false' @click='listArticle(1)'>First</span>"
-          var lastHtml = "<span class='page_false' @click='listArticle(" + maxPage + ")'>Last</span>"
-          var pageHtml = ""
-          pageList += firstHtml;
-
-          var start = (this.pageNum -2) > 0 ? (this.pageNum - 2) : 1;
-          var end = (maxPage - this.pageNum) > 2 ? (this.pageNum + 2) : maxPage;
-
-          for(var i = start ; i <= end ; i++){
-            if(i == this.pageNum){
-             pageList += "<span class='page_true' @click='listArticle("+ i +")'>"+ i +"</span>";
-            }else{
-              pageList += "<span class='page_false' @click='listArticle("+ i +")'>"+ i +"</span>";
-            }
-          }
-          pageList += lastHtml;
+      }).then((response) => {
+        console.log(response.data)
+        if(response.data.Result == 1){
+          this.list = response.data.Data
+          this.articleTotal = response.data.TotalCount
         }else{
-          alert(url.data.Message)
+          alert(response.data.Message)
         }
       })
     },
@@ -145,9 +144,13 @@ export default {
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
+      this.pageSize = val;
+      this.listArticle()
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
+      this.currentPage = val;
+      this.listArticle()
     }
   }
 }
@@ -203,7 +206,7 @@ body{
 }
 
 .article_content > button{
-  background-color: #FF4757;
+  
   font-size: 10px;
   border-radius: 2px;
   padding: 5px;
@@ -211,6 +214,15 @@ body{
   color: #FFFFFF;
   margin: 0px 5px 0px 0px;
   float: left;
+}
+.btn_danger{
+  background-color: #FF4757;
+}
+.btn_warn{
+  background-color:#ffa502;
+}
+.btn_success{
+  background-color: #2ed573;
 }
 
 .blog_content h3{

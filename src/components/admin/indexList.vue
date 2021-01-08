@@ -1,25 +1,49 @@
 <template>
     <div>
         <Vheader></Vheader>
-        <div>
-            <table>
-                <tr>
-                    <th >文章1</th>
-                    <th class="opteration">操作</th>
-                </tr>
-                <tr v-for="item in items" :key="item.id">
-                    <td>{{item.articleName}}</td>
-                    <td class="opteration">
-                        <li>编辑</li>
-                        <li>删除</li>
-                        <li>发布</li>
-                    </td>
-                </tr>
-            </table>
-        </div>
-        <button v-on:click="test">test</button>
-    </div>
+        <div class="articleList">
+            <el-table :data="tableData" border style="width: 100%">
+                <el-table-column
+                fixed
+                prop="addTime"
+                label="日期"
+                width="180">
+                </el-table-column>
 
+                <el-table-column
+                prop="articleName"
+                label="文章名"
+                width="400">
+                </el-table-column>
+
+                <el-table-column
+                label="操作"
+                width="100">
+
+                <template slot-scope="scope">
+                    <el-button @click="handleClick(scope.row.articleId)" type="text" size="small">查看</el-button>
+                    <el-button type="text" size="small">编辑</el-button>
+                </template>
+                </el-table-column>
+            </el-table>
+
+            <!--  分页小标-->
+            <div class="page_item">
+                <div  class="page_item_float">
+                    <el-pagination
+                    background
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page.sync="currentPage"
+                    :page-sizes="[20, 40, 60, 100]"
+                    :page-size="pageSize"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="articleTotal">
+                    </el-pagination>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 <script>
 import Vheader from './vheader.vue'
@@ -28,84 +52,73 @@ import Vheader from './vheader.vue'
         data () {
             return {
                 msg: "",
-                items : []
+                items : [],
+                tableData: [],
+                currentPage: 1,
+                articleTotal:0,
+                pageSize:20
             }
+        },
+        created (){
+            // 组件创建完后获取数据，
+            // 此时 data 已经被 observed 了
+            this.listArticle(1)
         },
         components:{
             Vheader,
             // Vfooter
         },
         watch:{
-            //to表示即将要进入的那个组件，from表示从哪个组件过来的
-            $route(to,from){
-                this.msg = to.params.name
-                console.log(111);
-            }
+            // 如果路由有变化，会再次执行该方法
+            '$route': 'listArticle'
         },
         methods :{
-            test:function(){
+            listArticle(){
                 // 由于 main.js 里全局定义的 axios,此处直接使用 $axios 即可。
                 // 由于 main.js 里定义了每个请求前缀，此处的 / 即为http://localhost:2716
-                this.$axios.get('/listArticle',{
+                this.axios.get('/listArticle',{
                     params:{
                         search : "",
-                        pageNum :1,
-                        pageSize :10
+                        pageNum :this.currentPage,
+                        pageSize :this.pageSize
                     }
                 }).then((response) => {
                     console.log(response.data)
                     if(response.data.Result == 1){
                         this.items = response.data.Data
+                        this.tableData = response.data.Data
+                        this.articleTotal = response.data.TotalCount
                     }
                 })
+            },
+            handleSizeChange(val) {
+                this.pageSize = val
+                this.listArticle()
+            },
+            handleCurrentChange(val) {
+                this.currentPage = val;
+                this.listArticle()
+            },
+            handleClick(row) {
+                console.log(row);
+                console.log(row.articleId);
             }
         }
     }
 </script>
 
 <style scoped>
-/* table{
-    margin: 10px auto;
-    width: 80%;
-    height: 100px;
-    font-size: 13px;
-    border: 1px solid red;
-    color: #666;
-    position: relative;
-    overflow: hidden;
-    box-sizing: border-box;
-    flex: 1;
-    max-width: 100%;
-    background-color: #fff;
-} */
-/* table{ 
-    margin: 10px auto;
-    width: 80%;
-    min-height: 25px;
-    line-height: 25px;
-    text-align: center;
-    border:1px solid #ccc;
-    border-collapse: collapse;
-} 
-tr {
-    border: 1px solid red;
-    display: table-row;
-    vertical-align: inherit;
-    border-color: inherit;
-} */
-table tr th, table tr td {
-    border:1px solid #ccc; 
-}
-table {
-    margin: 10px auto;
+.articleList{
     width: 70%;
-    text-align: center;
-    border-collapse: collapse;
-} 
-.opteration{
-    width: 200px;
+    margin: 0 auto;
 }
-table li{
-    list-style: none;
+.page_item{
+  width:80%;
+  margin: 0 auto ;
+  background: green;
+}
+.page_item_float{
+  margin: 10px auto;
+  float: left;
 }
 </style>
