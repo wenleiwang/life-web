@@ -4,10 +4,10 @@
             <h3 class="harder_logo">Wenwen</h3>
 
             <ul>
-                <li>首页</li>
-                <li>分类</li>
-                <li>归档</li>
-                <li>关于我</li>
+                <li @click="toIndex">首页</li>
+                <li @click="toClassify">分类</li>
+                <li @click="toIndex">归档</li>
+                <li @click="toShowMe">关于我</li>
             </ul>
 
             <div class="harder_search">
@@ -25,6 +25,20 @@ export default {
         return {
             count : 0
         }
+    },
+    methods:{
+      toIndex(){
+        this.$router.push({ path: "/" })
+      },
+      toClassify(){
+        this.$router.push({ name: 'classify' })
+      },
+      toPigeonhole(){
+        this.$router.push({ name: 'pigeonhole' })
+      },
+      toShowMe(){
+        this.$router.push({ name: 'showMe' })
+      }
     }
 }
 </script>
@@ -68,6 +82,9 @@ body{
   list-style: none;
   font-size: 18px;
   margin: 25px 20px;
+}
+.harder_body > ul > li:hover{
+  cursor: pointer;
 }
 
 .harder_search{

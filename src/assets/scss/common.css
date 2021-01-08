@@ -1,7 +1,7 @@
 html,body{
     margin: 0px;
     padding: 0px;
-    font-family: Microsoft YaHei;
+    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
     height: 100%;
     box-sizing: border-box;
 }

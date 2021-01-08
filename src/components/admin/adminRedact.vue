@@ -1,21 +1,69 @@
 <template>
-    <div>
+    <div class="bg-grid">
         <div class="leftMenu">
-            <li>保存</li>
-            <li @click="seeArticle">预览</li>
-            <li @click="updateArticle">发布</li>
+            <el-button icon="el-icon-search" circle @click="seeArticle">预览</el-button>
+            <br/>
+            <br/>
+            <el-button type="success" icon="el-icon-check" circle @click="updateArticle">发布</el-button>
         </div>
 
         <div id="editor">
-            <div>
-                <p>文章标题</p>
-                <input type="text" v-model="push.articleName">
-            </div>
-            <mavon-editor v-model="push.articleBody" ref="md" @imgAdd="imgAdd" @imgDel="imgDel" />
+            <el-form ref="form" :inline="true" label-width="100px">
+                <el-form-item label="文章标题">
+                    <el-input autosize v-model="push.articleName"></el-input>
+                </el-form-item>
+                <el-form-item label="文章首图">
+                    <el-input autosize v-model="push.articleImgUrl" ></el-input>
+                </el-form-item>
+                <div class="editorBody">
+                    <mavon-editor class="editorHeight" v-model="push.articleBody" ref="md" @imgAdd="imgAdd" @imgDel="imgDel" />
+                </div>
+                <el-form-item label="文章类型">
+                    <el-select v-model="push.articleFlag" placeholder="请选择文章类型">
+                        <el-option label="原创" value="0"></el-option>
+                        <el-option label="转载" value="1"></el-option>
+                        <el-option label="翻译" value="2"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="文章分类">
+                    <el-select v-model="push.classifyId" placeholder="请选择文章分类">
+                    <el-option label="JAVA" value="0"></el-option>
+                    <el-option label="高等数学" value="1"></el-option>
+                    <el-option label="日常杂说" value="2"></el-option>
+                    </el-select>
+                </el-form-item>
+                <br/>
+                <el-form-item label="文章标签">
+                    <el-tag
+                        :key="tag"
+                        v-for="tag in push.dynamicTags"
+                        closable
+                        :disable-transitions="false"
+                        @close="handleClose(tag)">
+                        {{tag}}</el-tag>
+                    <el-input
+                        class="input-new-tag"
+                        v-if="inputVisible"
+                        v-model="inputValue"
+                        ref="saveTagInput"
+                        size="small"
+                        @keyup.enter.native="handleInputConfirm"
+                        @blur="handleInputConfirm"
+                        ></el-input>
+                    <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
+                </el-form-item>
+                <br/>
+                <el-form-item label="开启收藏">
+                    <el-switch v-model="push.collectStatus" active-color="#13ce66"></el-switch>
+                </el-form-item>
+                <el-form-item label="开启评论">
+                    <el-switch v-model="push.commentStatus" active-color="#13ce66"></el-switch>
+                </el-form-item>
+                <el-form-item label="开启点赞">
+                    <el-switch v-model="push.starStatus" active-color="#13ce66"></el-switch>
+                </el-form-item>
+            </el-form>
         </div>
-        <div>{{push.articleBody}}</div>
-        <div>{{push.articleName}}</div>
-
     </div>
 </template>
 
@@ -28,18 +76,19 @@ export default {
             push:{
                 articleBody: "",
                 articleDescription: "",
-                articleFlag: 0,
+                articleFlag: '',
                 articleId: 0,
                 articleImgUrl: "",
                 articleName: "",
-                classifyIdList: [
-                    
-                ],
+                classifyId: '',
+                dynamicTags:['标签一'],
                 collectStatus: true,
                 commentStatus: true,
                 starStatus: true,
-                deleted : 0
-            }
+                deleted : 0,
+            },
+            inputVisible: false,
+            inputValue: ''
         }
     },
     components: {
@@ -85,7 +134,7 @@ export default {
         seeArticle(){
             this.push.deleted=2
             document.cookie="user_info=1;path = /"
-            this.$axios({
+            this.axios({
                 url :'/admin/updateArticle',
                 method : 'post',
                 data: this.push
@@ -99,21 +148,106 @@ export default {
                 }
             })
             
-        }
+        },
+        handleClose(tag) {
+            this.push.dynamicTags.splice(this.push.dynamicTags.indexOf(tag), 1);
+        },
 
+        showInput() {
+            this.inputVisible = true;
+            this.$nextTick(_ => {
+                this.$refs.saveTagInput.$refs.input.focus();
+            });
+        },
+
+        handleInputConfirm() {
+            let inputValue = this.inputValue;
+            if (inputValue) {
+            this.push.dynamicTags.push(inputValue);
+            }
+            this.inputVisible = false;
+            this.inputValue = '';
+        }
     }
 }
 </script>
 
 <style scoped>
 .leftMenu{
-    float: left;
+    float: right;
     height: 100%;
+    position: absolute;
+    right: 50px;
 }
 #editor {
-        margin: auto;
-        padding: 10px auto;
-        width: 70%;
-        height: 100%;
-    }
+    margin: 50px auto;
+    padding: 10px auto;
+    width: 70%;
+    height: 100%;
+}
+.editorBody{
+    margin: 0px auto 40px;
+    margin-left: 35px;
+}
+
+.bg-grid {
+    /* height: 1000px; */
+    padding: 10px;
+    padding-top: 64px;
+    background-color: #efefef;
+    background-image:   linear-gradient(#e7e6e6 1px, transparent 0),
+                        linear-gradient(90deg, #e7e6e6 1px, transparent 0);
+    background-size: 21px 21px, 21px 21px;
+    background-position: center;
+}
+
+.bg-grid:before,
+.bg-grid:after{
+    content: '';
+    position: absolute;
+    z-index: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    display: inline-block;
+    background-color: #fff;
+    height: 28px;
+    box-shadow: 68px 0 0 0 #fff, 
+                calc(68px * 2) 0 0 0 #fff, 
+                calc(68px * 3) 0 0 0 #fff, 
+                calc(68px * 4) 0 0 0 #fff, 
+                calc(68px * 5) 0 0 0 #fff, 
+                -68px 0 0 0 #fff, 
+                calc(68px * -2) 0 0 0 #fff, 
+                calc(68px * -3) 0 0 0 #fff, 
+                calc(68px * -4) 0 0 0 #fff, 
+                calc(68px * -5) 0 0 0 #fff;
+}
+.bg-grid:before {
+    top: 0;
+    width: 10px;
+}
+
+.bg-grid:after {
+    top: 26px;
+    width: 28px;
+    border-radius: 50%;
+}
+.editorHeight {
+    height: 600px;
+}
+.el-tag + .el-tag {
+    margin-left: 10px;
+}
+.button-new-tag {
+    margin-left: 10px;
+    height: 32px;
+    line-height: 30px;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+.input-new-tag {
+    width: 90px;
+    margin-left: 10px;
+    vertical-align: bottom;
+}
 </style>

@@ -8,9 +8,17 @@ Vue.use(VueRouter)
 import VueRouter from 'vue-router'
 // 引入模板
 
+const originalPush = VueRouter.prototype.push
+   VueRouter.prototype.push = function push(location) {
+   return originalPush.call(this, location).catch(err => err)
+}
+
 
 import adminIndex from '@/components/admin/adminIndex'
 import show from '@/components/show/show.vue'
+import classify from '@/components/show/classify.vue'
+import pigeonhole from '@/components/show/pigeonhole.vue'
+import showMe from '@/components/show/showMe.vue'
 import seeArticle from '@/components/show/seeArticle.vue'
 import indexList from '@/components/admin/indexList.vue'
 import adminRedact from '@/components/admin/adminRedact.vue'
@@ -22,6 +30,18 @@ const routes=[
   {
     path : '/',
     component:show
+  },{
+    path : '/classify',
+    component:classify,
+    name: 'classify'
+  },{
+    path : '/pigeonhole',
+    component:pigeonhole,
+    name: 'pigeonhole'
+  },{
+    path : '/showMe',
+    component:showMe,
+    name: 'showMe'
   },
   {
     path:'/admin/index',
@@ -39,22 +59,6 @@ const routes=[
     name : 'seeArticle',
     path:'/show/seeArticle',
     component:seeArticle,
-    beforeRouteUpdate  : (to,from,next) => {
-      debugger
-      document.cookie="user_info=1;path = /"
-      this.$axios({
-        url :'/admin/getArticle',
-        method : 'get',
-        data: this.push
-    }).then((url) => {
-        if(url.data.Result == 1){
-          this.article = url.data.Data.articleBody
-          debugger
-        }else{
-            alert(url.data.Message)
-        }
-    })
-    }
   }
 ]
 
