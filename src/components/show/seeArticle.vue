@@ -41,7 +41,7 @@ export default {
   methods: {
     getArticle() {
       // 去后端获取数据
-      this.axios.get('/admin/getArticle',{
+      this.axios.get('/getArticle',{
         params:{
           articleId : this.$route.query.id
         }

@@ -22,7 +22,7 @@
 
                 <template slot-scope="scope">
                     <el-button @click="handleClick(scope.row.articleId)" type="text" size="small">查看</el-button>
-                    <el-button type="text" size="small">编辑</el-button>
+                    <el-button @click="updateClick(scope.row.articleId)" type="text" size="small">编辑</el-button>
                 </template>
                 </el-table-column>
             </el-table>
@@ -100,8 +100,11 @@ import Vheader from './vheader.vue'
                 this.listArticle()
             },
             handleClick(row) {
-                console.log(row);
-                console.log(row.articleId);
+                var id = row;
+                this.$router.push({name : 'seeArticle' , query:{id}})
+            },
+            updateClick(id){
+                this.$router.push({name : 'adminRedact' , query:{id}})
             }
         }
     }

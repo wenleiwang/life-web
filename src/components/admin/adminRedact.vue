@@ -5,6 +5,9 @@
             <br/>
             <br/>
             <el-button type="success" icon="el-icon-check" circle @click="updateArticle">发布</el-button>
+            <br/>
+            <br/>
+            <el-button type="info" icon="el-icon-message" circle @click="returenArticleList">返回</el-button>
         </div>
 
         <div id="editor">
@@ -19,7 +22,7 @@
                     <mavon-editor class="editorHeight" v-model="push.articleBody" ref="md" @imgAdd="imgAdd" @imgDel="imgDel" />
                 </div>
                 <el-form-item label="文章类型">
-                    <el-select v-model="push.articleFlag" placeholder="请选择文章类型">
+                    <el-select v-model="push.articleFlag"  placeholder="请选择文章类型">
                         <el-option label="原创" value="0"></el-option>
                         <el-option label="转载" value="1"></el-option>
                         <el-option label="翻译" value="2"></el-option>
@@ -90,6 +93,13 @@ export default {
             inputVisible: false,
             inputValue: ''
         }
+    },
+    created () {
+        this.getArticle()
+    },
+    watch: {
+        // 如果路由有变化，会再次执行该方法
+        '$route': 'getArticle'
     },
     components: {
         // mavonEditor
@@ -167,7 +177,52 @@ export default {
             }
             this.inputVisible = false;
             this.inputValue = '';
-        }
+        },
+        returenArticleList(){
+            this.$router.push({ name: 'indexList' })
+        },
+        getArticle() {
+            
+            if(this.$route.query.id != null && this.$route.query.id != ''){
+                // 去后端获取数据
+                this.axios.get('/getArticle',{
+                    params:{
+                        articleId : this.$route.query.id
+                    }
+                }).then((url) => {
+                    if(url.data.Result == 1){
+                        this.push.articleBody = url.data.Data.articleBody
+                        this.push.articleDescription = url.data.Data.articleDescription
+                        this.push.articleFlag = url.data.Data.articleFlag
+                        this.push.articleId = url.data.Data.articleId
+                        this.push.articleImgUrl = url.data.Data.articleImgUrl
+                        this.push.articleName = url.data.Data.articleName
+                        this.push.classifyId = url.data.Data.classifyId
+                        this.push.dynamicTags = url.data.Data.dynamicTags
+                        this.push.collectStatus = url.data.Data.collectStatus
+                        this.push.commentStatus = url.data.Data.commentStatus
+                        this.push.starStatus = url.data.Data.starStatus
+                        this.push.deleted  = url.data.Data.deleted
+                    }else{
+                        alert(url.data.Message)
+                    }
+                })
+            }
+        },
+        stateFormatter(row){// 0-待提审;1-待审核;2-已驳回;3-已审核; ,
+          switch(row.auditState){
+            case 0:
+              return "原创"
+              break;
+            case 1:
+              return "转载"
+              break;
+            case 2:
+              return "翻译"
+              break;
+            default:
+          }
+        },
     }
 }
 </script>
@@ -180,7 +235,7 @@ export default {
     right: 50px;
 }
 #editor {
-    margin: 50px auto;
+    margin: 20px auto;
     padding: 10px auto;
     width: 70%;
     height: 100%;

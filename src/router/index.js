@@ -45,15 +45,18 @@ const routes=[
   },
   {
     path:'/admin/index',
-    component:adminIndex
+    component:adminIndex,
+    name:'adminIndex'
   },
   {
     path:'/admin/indexList',
-    component:indexList
+    component:indexList,
+    name:'indexList'
   },
   {
     path:'/admin/adminRedact',
-    component:adminRedact
+    component:adminRedact,
+    name : 'adminRedact'
   },
   {
     name : 'seeArticle',
