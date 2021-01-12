@@ -22,37 +22,40 @@
                     <mavon-editor class="editorHeight" v-model="push.articleBody" ref="md" @imgAdd="imgAdd" @imgDel="imgDel" />
                 </div>
                 <el-form-item label="文章类型">
-                    <el-select v-model="push.articleFlag"  placeholder="请选择文章类型">
-                        <el-option label="原创" value="0"></el-option>
-                        <el-option label="转载" value="1"></el-option>
-                        <el-option label="翻译" value="2"></el-option>
+                    <el-select v-model="push.articleFlag" placeholder="请选择文章类型">
+                        <el-option label="原创" :value="0"></el-option>
+                        <el-option label="转载" :value="1"></el-option>
+                        <el-option label="翻译" :value="2"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="文章分类">
-                    <el-select v-model="push.classifyId" placeholder="请选择文章分类">
-                    <el-option label="JAVA" value="0"></el-option>
-                    <el-option label="高等数学" value="1"></el-option>
-                    <el-option label="日常杂说" value="2"></el-option>
+                    <el-select v-model="push.classifyName" placeholder="请选择文章分类">
+                    <el-option label="JAVA" value="JAVA"></el-option>
+                    <el-option label="高等数学" value="高等数学"></el-option>
+                    <el-option label="日常杂说" value="日常杂说"></el-option>
                     </el-select>
                 </el-form-item>
                 <br/>
+
                 <el-form-item label="文章标签">
                     <el-tag
                         :key="tag"
-                        v-for="tag in push.dynamicTags"
+                        v-for="tag in dynamicTags"
                         closable
                         :disable-transitions="false"
                         @close="handleClose(tag)">
                         {{tag}}</el-tag>
-                    <el-input
-                        class="input-new-tag"
-                        v-if="inputVisible"
-                        v-model="inputValue"
-                        ref="saveTagInput"
-                        size="small"
-                        @keyup.enter.native="handleInputConfirm"
-                        @blur="handleInputConfirm"
-                        ></el-input>
+                        <el-autocomplete
+                            class="inline-input"
+                            v-if="inputVisible"
+                            v-model="inputValue"
+                            ref="saveTagInput"
+                            size="small"
+                            :fetch-suggestions="querySearch"
+                            @select="handleSelect"
+                            @keyup.enter.native="handleInputConfirm"
+                            @visible-change="handleInputConfirm"
+                        ></el-autocomplete>
                     <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
                 </el-form-item>
                 <br/>
@@ -83,18 +86,22 @@ export default {
                 articleId: 0,
                 articleImgUrl: "",
                 articleName: "",
-                classifyId: '',
-                dynamicTags:['标签一'],
+                classifyName: '',
+                tagIdList:[],
                 collectStatus: true,
                 commentStatus: true,
                 starStatus: true,
                 deleted : 0,
             },
             inputVisible: false,
-            inputValue: ''
+            inputValue: '',
+            restaurants: [],
+            dynamicTags:[],
+            listClassify:[]
         }
     },
     created () {
+        this.loadAll();
         this.getArticle()
     },
     watch: {
@@ -128,6 +135,38 @@ export default {
         updateArticle(){
             this.push.deleted=0
             document.cookie="user_info=1;path = /"
+
+
+            this.push.tagIdList.forEach((item) => {
+                var tagName
+                this.restaurants.forEach(
+                   (tag) => {
+                        if(item == tag.tagId){
+                            tagName = tag.tagName
+                        }
+                   }
+                )
+                if(this.dynamicTags.indexOf(tagName) === -1){
+                    var index = this.push.tagIdList.indexOf(item);
+                    if (index > -1) {
+                        this.push.tagIdList.splice(index, 1);
+                    }
+                }
+            })
+            this.dynamicTags.forEach((item => {
+                var id
+                this.restaurants.forEach(
+                   (tag) => {
+                        if(item == tag.tagName){
+                            id = tag.tagId
+                        }
+                   }
+                )
+
+                if(this.push.tagIdList.indexOf(id) === -1){
+                    this.push.tagIdList.push(id)
+                }
+            }))
             this.$axios({
                 url :'/admin/updateArticle',
                 method : 'post',
@@ -144,6 +183,37 @@ export default {
         seeArticle(){
             this.push.deleted=2
             document.cookie="user_info=1;path = /"
+
+            this.push.tagIdList.forEach((item) => {
+                var tagName
+                this.restaurants.forEach(
+                   (tag) => {
+                        if(item == tag.tagId){
+                            tagName = tag.tagName
+                        }
+                   }
+                )
+                if(this.dynamicTags.indexOf(tagName) === -1){
+                    var index = this.push.tagIdList.indexOf(item);
+                    if (index > -1) {
+                        this.push.tagIdList.splice(index, 1);
+                    }
+                }
+            })
+            this.dynamicTags.forEach((item => {
+                var id
+                this.restaurants.forEach(
+                   (tag) => {
+                        if(item == tag.tagName){
+                            id = tag.tagId
+                        }
+                   }
+                )
+
+                if(this.push.tagIdList.indexOf(id) === -1){
+                    this.push.tagIdList.push(id)
+                }
+            }))
             this.axios({
                 url :'/admin/updateArticle',
                 method : 'post',
@@ -160,7 +230,7 @@ export default {
             
         },
         handleClose(tag) {
-            this.push.dynamicTags.splice(this.push.dynamicTags.indexOf(tag), 1);
+            this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
         },
 
         showInput() {
@@ -169,11 +239,100 @@ export default {
                 this.$refs.saveTagInput.$refs.input.focus();
             });
         },
+        querySearch(queryString, cb) {
+            var restaurants = [];
+            this.restaurants.forEach((item) =>{
+                var str = {value:item.tagName,id:item.tagId}
+                restaurants.push(str);
+            })
 
+            var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+            cb(results);
+        },
+        createFilter(queryString) {
+            return (restaurant) => {
+                return (restaurant.value.indexOf(queryString) === 0);
+            };
+        },
+        loadAll(){
+            document.cookie="user_info=1;path = /"
+            this.axios({
+                url :'/admin/listClassify',
+                method : 'get'
+            }).then((url) => {
+                if(url.data.Result == 1){
+                    this.listClassify = url.data.Data
+                }else{
+                    alert(url.data.Message)
+                }
+            })
+            this.axios({
+                url :'/admin/listTag',
+                method : 'get'
+            }).then((url) => {
+                if(url.data.Result == 1){
+                    this.restaurants = url.data.Data
+                }else{
+                    alert(url.data.Message)
+                }
+            })
+        },
+        handleSelect(item) {
+            if (item) {
+                this.dynamicTags.push(item.value);
+            }
+            this.inputVisible = false;
+            this.inputValue = '';
+        },
         handleInputConfirm() {
             let inputValue = this.inputValue;
+            if(!inputValue){
+                this.inputVisible = false;
+                this.inputValue = '';
+            }else if (this.restaurants.indexOf(inputValue) === 0) {
+                this.dynamicTags.push(inputValue);
+                this.inputVisible = false;
+                this.inputValue = '';
+            }else{
+                this.$confirm('-->'+inputValue + '<-- 标签不在已知标签哟, 是否创建标签?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    // 调用创建接口
+                    this.axios.get('admin/updateTag',{
+                        params:{
+                            tagName : inputValue
+                        }
+                    }).then((url) => {
+                        this.dynamicTags.push(inputValue);
+                        this.inputVisible = false;
+                        this.inputValue = '';
+                        this.loadAll();
+                        this.$message({
+                            type: 'success',
+                            message: '标签创建成功!'
+                        });
+                    }).catch(()=>{
+                        this.$message({
+                            type: 'info',
+                            message: '标签创建失败!'
+                        });
+                    })
+                    
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消创建分类'
+                    });          
+                });
+            }
+            
+        },
+        addInputConfirm() {
+            let inputValue = this.inputValue;
             if (inputValue) {
-            this.push.dynamicTags.push(inputValue);
+                this.dynamicTags.push(inputValue);
             }
             this.inputVisible = false;
             this.inputValue = '';
@@ -198,7 +357,15 @@ export default {
                         this.push.articleImgUrl = url.data.Data.articleImgUrl
                         this.push.articleName = url.data.Data.articleName
                         this.push.classifyId = url.data.Data.classifyId
-                        this.push.dynamicTags = url.data.Data.dynamicTags
+                        if(url.data.Data.tagIdList != null){
+                            this.push.tagIdList = url.data.Data.tagIdList
+                            this.axios.post('/admin/listTagNameByTagId',url.data.Data.tagIdList).then((overTag) => {
+                                overTag.data.Data.forEach((item) =>{
+                                    this.dynamicTags.push(item.tagName)
+                                })
+                                console.log(this.dynamicTags)
+                            })
+                        }
                         this.push.collectStatus = url.data.Data.collectStatus
                         this.push.commentStatus = url.data.Data.commentStatus
                         this.push.starStatus = url.data.Data.starStatus
