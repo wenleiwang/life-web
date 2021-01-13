@@ -29,11 +29,13 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="文章分类">
-                    <el-select v-model="push.classifyName" placeholder="请选择文章分类">
-                    <el-option label="JAVA" value="JAVA"></el-option>
-                    <el-option label="高等数学" value="高等数学"></el-option>
-                    <el-option label="日常杂说" value="日常杂说"></el-option>
-                    </el-select>
+                    <el-autocomplete
+                      class="inline-input"
+                      v-model="push.classifyName"
+                      placeholder="请选择文章分类"
+                      :fetch-suggestions="classifySearch"
+                      @select="classifySelect">
+                    </el-autocomplete>
                 </el-form-item>
                 <br/>
 
@@ -229,6 +231,21 @@ export default {
             })
             
         },
+
+        classifySearch(queryString, cb) {
+            var restaurants = this.listClassify;
+            var results = queryString ? restaurants.filter(this.createClassifyFilter(queryString)) : restaurants;
+            // 调用 callback 返回建议列表的数据
+            cb(results);
+        },
+        createClassifyFilter(queryString) {
+            return (listClassify) => {
+            return (listClassify.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+            };
+        },
+        classifySelect(item){
+            this.push.classifyName = item.value
+        },
         handleClose(tag) {
             this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
         },
@@ -261,7 +278,10 @@ export default {
                 method : 'get'
             }).then((url) => {
                 if(url.data.Result == 1){
-                    this.listClassify = url.data.Data
+                    url.data.Data.forEach((item) => {
+                        var classify = {value:item.classifyName}
+                        this.listClassify.push(classify)
+                    })
                 }else{
                     alert(url.data.Message)
                 }
@@ -356,14 +376,13 @@ export default {
                         this.push.articleId = url.data.Data.articleId
                         this.push.articleImgUrl = url.data.Data.articleImgUrl
                         this.push.articleName = url.data.Data.articleName
-                        this.push.classifyId = url.data.Data.classifyId
+                        this.push.classifyName = url.data.Data.classifyName
                         if(url.data.Data.tagIdList != null){
                             this.push.tagIdList = url.data.Data.tagIdList
                             this.axios.post('/admin/listTagNameByTagId',url.data.Data.tagIdList).then((overTag) => {
                                 overTag.data.Data.forEach((item) =>{
                                     this.dynamicTags.push(item.tagName)
                                 })
-                                console.log(this.dynamicTags)
                             })
                         }
                         this.push.collectStatus = url.data.Data.collectStatus
