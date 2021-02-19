@@ -13,7 +13,7 @@ const originalPush = VueRouter.prototype.push
    return originalPush.call(this, location).catch(err => err)
 }
 
-
+import admin from '@/components/admin/admin'
 import adminIndex from '@/components/admin/adminIndex'
 import show from '@/components/show/show.vue'
 import classify from '@/components/show/classify.vue'
@@ -42,6 +42,11 @@ const routes=[
     path : '/showMe',
     component:showMe,
     name: 'showMe'
+  },
+  {
+    path:'/admin/',
+    component:admin,
+    name:'admin'
   },
   {
     path:'/admin/index',

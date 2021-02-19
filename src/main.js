@@ -32,6 +32,9 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI)
 
+import AdminInde from './admin/admin-Index' 
+Vue.use(AdminInde)
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
