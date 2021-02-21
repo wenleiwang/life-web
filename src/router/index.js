@@ -1,11 +1,9 @@
 // 引入VUE
 import Vue from 'vue'
 // 引入vue-router
-import Router from 'vue-router'
+import VueRouter from 'vue-router'
 // 第三方库需要use一下才能使用
 Vue.use(VueRouter)
-
-import VueRouter from 'vue-router'
 // 引入模板
 
 const originalPush = VueRouter.prototype.push
@@ -16,17 +14,20 @@ const originalPush = VueRouter.prototype.push
 import admin from '@/components/admin/admin'
 import adminIndex from '@/components/admin/adminIndex'
 import login from '@/components/admin/login'
-import PCIndex from '@/components/admin/PCIndex'
 
 import show from '@/components/show/show.vue'
 import classify from '@/components/show/classify.vue'
 import pigeonhole from '@/components/show/pigeonhole.vue'
 import showMe from '@/components/show/showMe.vue'
 import seeArticle from '@/components/show/seeArticle.vue'
-import indexList from '@/components/admin/indexList.vue'
+import adminIndexNew from '@/components/admin/indexList.vue'
 import adminRedact from '@/components/admin/adminRedact.vue'
 
-
+// admin下的子路由
+import redact from '@/pages/AdminRedact/redact.vue'
+import me from '@/pages/Me/me.vue'
+import updatePassword from '@/pages/updatePassword/updatePassword.vue'
+import indexList from '@/pages/IndexList/indexList.vue'
 
 // 定义routes路由的集合，数组类型
 const routes=[
@@ -55,12 +56,24 @@ const routes=[
     name:'admin',
     children:[
       {
-        path: '/index',
-        name: 'PCIndex',
-        component: PCIndex,
-        meta: {
-          requireAuth: true
-        }
+        path : '/admin/redact',
+        component:redact,
+        name: 'redact'
+      },
+      {
+        path : '/admin/me',
+        component:me,
+        name: 'me'
+      },
+      {
+        path : '/admin/updatePassword',
+        component:updatePassword,
+        name: 'updatePassword'
+      },
+      {
+        path : '/admin/indexList',
+        component:indexList,
+        name: 'indexList'
       }
     ]
   },
@@ -76,8 +89,8 @@ const routes=[
   },
   {
     path:'/admin/indexList',
-    component:indexList,
-    name:'indexList'
+    component:adminIndexNew,
+    name:'adminIndexNew'
   },
   {
     path:'/admin/adminRedact',

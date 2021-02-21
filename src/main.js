@@ -7,22 +7,6 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import hljs from 'highlight.js';
 
-import Vuex from 'vuex'
-
-Vue.use(Vuex)
-export default new Vuex.Store({
-  state: {
-    user: {
-      username: window.localStorage.getItem('user' || '[]') == null ? '' : JSON.parse(window.localStorage.getItem('user' || '[]')).username
-    }
-  },
-  mutations: {
-    login (state, user) {
-      state.user = user
-      window.localStorage.setItem('user', JSON.stringify(user))
-    }
-  }
-})
 
 import './assets/scss/common.css'
 
