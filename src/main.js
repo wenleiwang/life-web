@@ -7,6 +7,23 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import hljs from 'highlight.js';
 
+import Vuex from 'vuex'
+
+Vue.use(Vuex)
+export default new Vuex.Store({
+  state: {
+    user: {
+      username: window.localStorage.getItem('user' || '[]') == null ? '' : JSON.parse(window.localStorage.getItem('user' || '[]')).username
+    }
+  },
+  mutations: {
+    login (state, user) {
+      state.user = user
+      window.localStorage.setItem('user', JSON.stringify(user))
+    }
+  }
+})
+
 import './assets/scss/common.css'
 
 
@@ -32,8 +49,24 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI)
 
-import AdminInde from './admin/admin-Index' 
-Vue.use(AdminInde)
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.requireAuth) {
+    // if (state.user.username) {
+    //   next()
+    // } else {
+    //   next({
+    //     path: 'login',
+    //     query: {redirect: to.fullPath}
+    //   })
+    // }
+    next()
+  } else {
+    next()
+  }
+}
+)
+
 
 /* eslint-disable no-new */
 new Vue({

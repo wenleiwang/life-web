@@ -30,7 +30,7 @@
     
     <el-main>
       <!-- 组件会在 `currentTabComponent` 改变时改变 -->
-      <component v-bind:is="currentTabComponent"></component>
+      <router-view/>
       <!-- <el-table :data="tableData">
         <el-table-column prop="date" label="日期" width="140">
         </el-table-column>
@@ -45,16 +45,18 @@
 </template>
 
 <script>
-
 export default {
     data() {
       return {
-        currentTab: "tabindex"
+        currentTab: "AdminIndex"
       }
+    },
+    components:{
+      'AdminIndex':this.AdminIndex
     },
     computed: {
       currentTabComponent: function() {
-        return "tab" + this.currentTab.toLowerCase();
+        return "AdminIndex";
       }
     }
 }

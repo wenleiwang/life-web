@@ -15,6 +15,9 @@ const originalPush = VueRouter.prototype.push
 
 import admin from '@/components/admin/admin'
 import adminIndex from '@/components/admin/adminIndex'
+import login from '@/components/admin/login'
+import PCIndex from '@/components/admin/PCIndex'
+
 import show from '@/components/show/show.vue'
 import classify from '@/components/show/classify.vue'
 import pigeonhole from '@/components/show/pigeonhole.vue'
@@ -29,7 +32,10 @@ import adminRedact from '@/components/admin/adminRedact.vue'
 const routes=[
   {
     path : '/',
-    component:show
+    component:show,
+    meta: {
+      requireAuth: true
+    }
   },{
     path : '/classify',
     component:classify,
@@ -46,7 +52,22 @@ const routes=[
   {
     path:'/admin/',
     component:admin,
-    name:'admin'
+    name:'admin',
+    children:[
+      {
+        path: '/index',
+        name: 'PCIndex',
+        component: PCIndex,
+        meta: {
+          requireAuth: true
+        }
+      }
+    ]
+  },
+  {
+    path:'/login',
+    component:login,
+    name:'login'
   },
   {
     path:'/admin/index',
