@@ -4,7 +4,12 @@
     <div class="content_body">
       <div class="content_pic">这里是pic</div>
       
-      <artcleList/>
+      <!-- <artcleList/> --><h1>{{ this.$store.state.count }}</h1>
+      <div>
+      <h1>{{countTest}}</h1>
+      <button @click="addfn()">增加</button>
+
+    </div>
 
       <div id="classify" class="article_list">
         <div>
@@ -47,6 +52,8 @@ import vfooter from '@/components/show/vfooter'
 import Swiper from 'swiper'
 
 import artcleList from '../ArticleList/articleList'
+
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'show',
   data(){
@@ -71,6 +78,11 @@ export default {
       ]
     }
   },
+  computed:{
+    countTest () {
+      return this.$store.state.name;
+    }
+  },
   created (){
     // 组件创建完后获取数据，
     // 此时 data 已经被 observed 了
@@ -86,6 +98,10 @@ export default {
     artcleList
   },
   methods :{
+    addfn(){
+       //提交名为addmu的mutations
+       this.$store.commit('addmu');
+    },
     listArticle(){
       this.axios.get('/listArticle',{
         

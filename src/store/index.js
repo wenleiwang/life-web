@@ -12,7 +12,12 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state,
-    mutaion,
+    // mutaion,
+    mutations : {
+        addmu(state){
+            state.name++
+        }
+    },
     actions,
     getters
 })
