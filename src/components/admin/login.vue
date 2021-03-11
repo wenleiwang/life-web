@@ -12,14 +12,14 @@
                   auto-complete="off" placeholder="密码"></el-input>
       </el-form-item>
       <el-form-item style="width: 100%">
-        <el-button type="primary" style="width: 100%;background: #505458;border: none" v-on:click="login">登录</el-button>
+        <el-button type="primary" style="width: 100%;background: #505458;border: none" v-on:click="loginMethod">登录</el-button>
       </el-form-item>
     </el-form>
   </body>
 </template>
 
 <script>
-
+import {login} from '../../api'
   export default {
     name: 'Login',
     data () {
@@ -32,19 +32,17 @@
       }
     },
     methods: {
-      login () {
-        this.$axios
-          .post('/login', {
-            username: this.loginForm.username,
-            password: this.loginForm.password
-          })
-          .then(successResponse => {
-            if (successResponse.data.code === 200) {
-              this.$router.replace({path: '/index'})
-            }
-          })
-          .catch(failResponse => {
-          })
+      loginMethod () {
+        const user = login({'loginName':this.loginForm.username,'userPassword':this.loginForm.password})
+        debugger
+        if(user.Result === 1){
+          // 登录成功，保存用户信息
+          debugger
+          this.$store.dispatch('login',user.data)
+        }else{
+          // 弹框失败
+        }
+
       }
     }
   }

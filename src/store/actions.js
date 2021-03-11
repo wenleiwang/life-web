@@ -5,12 +5,14 @@
 import {
     RECEIVE_ARITCLE,
     RECEIVE_REQ_ARITCLE,
-    RECEIVE_CLASSIFY
+    RECEIVE_CLASSIFY,
+    RECEIVE_USER
 } from './mutation-type'
 
 import {
     listArticle,
-    listClassify
+    listClassify,
+    login
 } from '../api'
 
 export default {
@@ -35,6 +37,11 @@ export default {
             commit(RECEIVE_ARITCLE,listAritcle)
         }
         
+    },
+
+    login({commit,state},user){
+        debugger
+        commit(RECEIVE_USER,user);
     }
     // 异步获取分类列表
 }
