@@ -4,11 +4,8 @@
     <div class="content_body">
       <div class="content_pic">这里是pic</div>
       
-      <!-- <artcleList/> --><h1>{{ this.$store.state.count }}</h1>
+      <artcleList/>
       <div>
-      <h1>{{countTest}}</h1>
-      <button @click="addfn()">增加</button>
-
     </div>
 
       <div id="classify" class="article_list">
@@ -58,39 +55,29 @@ export default {
   name: 'show',
   data(){
     return {
-      list :[],
-      pageSize:20,
-      currentPage: 1,
-      articleTotal:0,
-      options: [
-        {
-            value: "0",
-            label: "原创"
-        },
-        {
-            value: "1",
-            label: "转载"
-        },
-        {
-            value: "2",
-            label: "翻译"
-        }
-      ]
+      
     }
   },
   computed:{
     countTest () {
       return this.$store.state.name;
+    },
+    listArticleAddToStore(){
+      this.$store.dispatch('listAritcle',{
+            'search' : '',
+            'pageSize' : 10,
+            'pageNum' : 1
+        });
     }
   },
   created (){
     // 组件创建完后获取数据，
     // 此时 data 已经被 observed 了
-    this.listArticle()
+    // this.listArticle()
   },
   watch: {
     // 如果路由有变化，会再次执行该方法
-    '$route': 'listArticle'
+    // '$route': 'listArticle'
   },
   components :{
     vheader,
@@ -101,38 +88,7 @@ export default {
     addfn(){
        //提交名为addmu的mutations
        this.$store.commit('addmu');
-    },
-    listArticle(){
-      this.axios.get('/listArticle',{
-        
-        params:{
-          search:'',
-          pageNum:this.currentPage,
-          pageSize:this.pageSize
-        }
-      }).then((response) => {
-        console.log(response.data)
-        if(response.data.Result == 1){
-          this.list = response.data.Data
-          this.articleTotal = response.data.TotalCount
-        }else{
-          alert(response.data.Message)
-        }
-      })
-    },
-    seeArticle(id){
-      this.$router.push({name : 'seeArticle' , query:{id}})
-    },
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
-      this.pageSize = val;
-      this.listArticle()
-    },
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
-      this.currentPage = val;
-      this.listArticle()
-    }
+    },    
   }
 }
 </script>

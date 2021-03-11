@@ -2,7 +2,7 @@
   <div id="show">
             <div class="blog_content">
         <!-- 循环列表 -->
-        <div class="article_item" v-for="item in list" :key="item.articleId" @click="seeArticle(item.articleId)">
+        <div class="article_item" v-for="item in listArticleMounted" :key="item.articleId" @click="seeArticle(item.articleId)">
           <div class="article_content">
             <button v-bind:class="{'btn_danger' : item.articleFlag == 0,
                                    'btn_warn' : item.articleFlag == 1,
@@ -50,7 +50,58 @@
 <script>
 
 export default {
-
+  data(){
+    return {
+      list :[],
+      pageSize:20,
+      currentPage: 1,
+      articleTotal:0,
+      options: [
+        {
+            value: "0",
+            label: "原创"
+        },
+        {
+            value: "1",
+            label: "转载"
+        },
+        {
+            value: "2",
+            label: "翻译"
+        }
+      ]
+    }
+  },
+  computed:{
+    listArticleMounted(){
+      var data = this.$store.state.listAritcle
+      debugger
+      return data
+    }
+  },
+  methods:{
+    seeArticle(id){
+      this.$router.push({name : 'seeArticle' , query:{id}})
+    },
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+      this.pageSize = val;
+      this.$store.dispatch('listAritcle',{
+            'search' : '',
+            'pageSize' : this.pageSize,
+            'pageNum' : this.currentPage
+        });
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+      this.currentPage = val;
+      this.$store.dispatch('listAritcle',{
+            'search' : '',
+            'pageSize' : this.pageSize,
+            'pageNum' : this.currentPage
+        });
+    }
+  }
 }
 </script>
 

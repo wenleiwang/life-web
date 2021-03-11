@@ -21,16 +21,15 @@ export default {
         if(result.Result === 0){
             const listAritcle = result.Data
             // 根据结果提交一个mutation
-            commit(RECEIVE_ARITCLE,listAritcle)
         }
         
     },
     // 异步获取文章列表
-    async listAritcle ({commit,state}){
+    async listAritcle ({commit,state},data){
         // 发送异步ajax请求
         
-        const result = await reqAritcle(state.reqAritcle)
-        if(result.Result === 0){
+        const result = await listArticle(data)
+        if(result.Result === 1){
             const listAritcle = result.Data
             // 根据结果提交一个mutation
             commit(RECEIVE_ARITCLE,listAritcle)

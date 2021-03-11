@@ -11,7 +11,8 @@ export default {
     [RECEIVE_REQ_ARITCLE] (state, {reqArticle}){
         state.reqArticle = reqArticle
     },
-    [RECEIVE_ARITCLE] (state, {listAritcle}){
+    [RECEIVE_ARITCLE] (state, listAritcle){
+        debugger
         state.listAritcle = listAritcle
     },
 
