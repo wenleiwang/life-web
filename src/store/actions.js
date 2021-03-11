@@ -40,7 +40,6 @@ export default {
     },
 
     login({commit,state},user){
-        debugger
         commit(RECEIVE_USER,user);
     }
     // 异步获取分类列表

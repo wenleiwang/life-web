@@ -32,13 +32,12 @@ import {login} from '../../api'
       }
     },
     methods: {
-      loginMethod () {
-        const user = login({'loginName':this.loginForm.username,'userPassword':this.loginForm.password})
-        debugger
+      async loginMethod () {
+        const user = await login({'loginName':this.loginForm.username,'userPassword':this.loginForm.password})
         if(user.Result === 1){
           // 登录成功，保存用户信息
-          debugger
-          this.$store.dispatch('login',user.data)
+          this.$router.replace('/admin/index')
+          this.$store.dispatch('login',user.Data)
         }else{
           // 弹框失败
         }
