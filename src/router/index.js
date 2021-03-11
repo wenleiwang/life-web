@@ -28,6 +28,7 @@ import redact from '@/pages/AdminRedact/redact.vue'
 import me from '@/pages/Me/me.vue'
 import updatePassword from '@/pages/updatePassword/updatePassword.vue'
 import indexList from '@/pages/IndexList/indexList.vue'
+import adminArticleList from '@/pages/ArticleList/articleList.vue'
 
 // 定义routes路由的集合，数组类型
 const routes=[
@@ -59,6 +60,11 @@ const routes=[
         path : '/admin/redact',
         component:redact,
         name: 'redact'
+      },
+      {
+        path : '/admin/adminArticleList',
+        component:adminArticleList,
+        name: 'adminArticleList'
       },
       {
         path : '/admin/me',

@@ -6,7 +6,7 @@
         <el-submenu index="1">
         <template slot="title"><i class="el-icon-message"></i>文章管理</template>
             <el-menu-item index="1-1" @click="goTo('/admin/redact')">新增文章</el-menu-item>
-            <el-menu-item index="1-2" @click="goTo('/admin/indexList')">文章列表</el-menu-item>
+            <el-menu-item index="1-2" @click="goTo('/admin/adminArticleList')">文章列表</el-menu-item>
         </el-submenu>
         <el-submenu index="2">
         <template slot="title"><i class="el-icon-menu"></i>分类标签管理</template>

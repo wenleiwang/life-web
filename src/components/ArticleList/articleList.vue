@@ -108,7 +108,7 @@ export default {
 <style>
 .blog_content{
   margin: 5px auto;
-  width: 60%;
+  width: 95%;
   height: 100%;
   float: left;
   border-radius: 5px;
@@ -120,13 +120,27 @@ export default {
 
 .article_item{
   width: 100%;
+  height: 200px;
   margin: 15px auto;
   float: left;
+  border-bottom: 1px solid #ced6e0;
 }
 .article_item:hover{
   cursor: pointer;
 }
-
+.article_content{
+  float: left;
+  margin: 0px auto;
+  width: 85%;
+}
+.article_pic{
+  width: 15%;
+  height: 150px;
+  margin: 20px 0;
+  border: 1px solid #ffffff;
+  float: left;
+  box-sizing: border-box;
+}
 .article_content > button{
   
   font-size: 10px;
@@ -137,24 +151,17 @@ export default {
   margin: 0px 5px 0px 0px;
   float: left;
 }
-.btn_danger{
-  background-color: #FF4757;
-}
-.btn_warn{
-  background-color:#ffa502;
-}
-.btn_success{
-  background-color: #2ed573;
-}
 
 .blog_content h3{
   font-size: 18px;
   font-family: Microsoft YaHei;
   color: #2F3542;
   margin: 0px auto 0px 10px;
+  position: relative;
+  width: 80%;
 }
 
-.blog_content > p{
+.article_content > p{
   color: #57606F;
   font-family: Microsoft YaHei;
   font-size: 14px;
@@ -180,43 +187,32 @@ export default {
   border-radius: 12px;
 }
 
-.article_content{
-  float: left;
-  margin: 0px auto;
-  width: 70%;
-}
-.article_pic{
-  float: left;
-}
+
 
 .article_pic > img{
   border-radius: 5px;
-  width: 150px;
-  height: 92px;
-  margin: 0 20px;
-}
-
-.article_list{
-  margin: 5px auto;
-  float: right;
-  width: 400px;
-  border-radius: 5px;
-  background-color: #FFFFFF;
-  box-shadow: 1px 1px 5px#a4b0be;
-}
-
-.article_list > div {
-  position: relative;
+  min-height: 150px;
   width: 100%;
-  height: 45px;
-  background: #DFE4EA;
+  height: 100%;
 }
 
-.article_list > div > h3{
-  font-size: 18px;
-  color: #2F3542;
+
+.btn_danger{
+  background-color: #FF4757;
+}
+.btn_warn{
+  background-color:#ffa502;
+}
+.btn_success{
+  background-color: #2ed573;
+}
+.page_item{
+  width:80%;
+  margin: 0 auto ;
+  background: green;
+}
+.page_item_float{
+  margin: 10px auto;
   float: left;
-  margin: 10px;
 }
-
 </style>
