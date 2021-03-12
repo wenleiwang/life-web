@@ -36,10 +36,18 @@ import {login} from '../../api'
         const user = await login({'loginName':this.loginForm.username,'userPassword':this.loginForm.password})
         if(user.Result === 1){
           // 登录成功，保存用户信息
-          this.$router.replace('/admin/index')
+          this.$message({
+            message: '登录成功！',
+            type: 'success'
+          });
+          this.$router.replace('/admin/indexList')
           this.$store.dispatch('login',user.Data)
         }else{
           // 弹框失败
+          this.$message({
+            message: '登录失败，原因：'+user.Message,
+            type: 'warning'
+          });
         }
 
       }

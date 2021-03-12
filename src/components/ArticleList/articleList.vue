@@ -120,7 +120,7 @@ export default {
 
 .article_item{
   width: 100%;
-  height: 200px;
+  height: 150px;
   margin: 15px auto;
   float: left;
   border-bottom: 1px solid #ced6e0;
@@ -131,11 +131,11 @@ export default {
 .article_content{
   float: left;
   margin: 0px auto;
-  width: 85%;
+  width: 80%;
 }
 .article_pic{
-  width: 15%;
-  height: 150px;
+  width: 100px;
+  height: 100px;
   margin: 20px 0;
   border: 1px solid #ffffff;
   float: left;
@@ -191,7 +191,7 @@ export default {
 
 .article_pic > img{
   border-radius: 5px;
-  min-height: 150px;
+  min-height: 100px;
   width: 100%;
   height: 100%;
 }

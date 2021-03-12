@@ -5,7 +5,7 @@
   </el-aside>
   
   <el-container>
-    <el-main>
+    <el-main class="mainBody">
       <router-view/>
     </el-main>
   </el-container>
@@ -51,5 +51,9 @@ color: #333;
   font-weight: bold;
   float: left;
   text-shadow: 2px 2px 1px #000000;
+}
+.mainBody{
+  margin: 0 10px;
+  padding: 0;
 }
 </style>
