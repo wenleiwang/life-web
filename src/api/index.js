@@ -32,4 +32,8 @@ export const listTagNameByTagId = (data) => ajax('/admin/listTagNameByTagId',dat
 /*************************************************************************** login */
 export const login = (data) => ajax('/login',data,'POST')
 
+/*************************************************************************** 上传文件 */
+// 上传图片
+export const upload = (data) => ajax('/file/upload',data,'POST')
+
 export const test = (data) => ajax('/test',data,GET);

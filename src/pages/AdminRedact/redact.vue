@@ -76,7 +76,7 @@
 </template>
 
 <script>
-
+import {upload} from '../../api'
 export default {
     name: 'editor',
     data(){
@@ -115,21 +115,29 @@ export default {
         // or 'mavon-editor': mavonEditor
     },
     methods : {
-        imgAdd (pos, $file) {
+         async imgAdd (pos, $file) {
             let formdata = new FormData()
             formdata.append('file', $file)
-            this.$axios({
-               url: '/file/upload',
-               method: 'post',
-               data: formdata,
-               headers: { 'Content-Type': 'multipart/form-data;charset=UTF-8' ,
-                'aaa':'aaa'
-               },
-           }).then((url) => {
-               // 第二步.将返回的url替换到文本原位置![...](0) -> ![...](url)
-            //    this.$vm.$img2Url(pos, url.data);
-               this.$refs.md.$img2Url(pos, url.data);
-           })
+            const result = await upload(formdata)
+            debugger
+            if(result != null){
+                // 上传成功
+                console.log(result)
+            }else{
+                // 上传失败
+            }
+        //     this.$axios({
+        //        url: '/file/upload',
+        //        method: 'post',
+        //        data: formdata,
+        //        headers: { 'Content-Type': 'multipart/form-data;charset=UTF-8' ,
+        //         'aaa':'aaa'
+        //        },
+        //    }).then((url) => {
+        //        // 第二步.将返回的url替换到文本原位置![...](0) -> ![...](url)
+        //     //    this.$vm.$img2Url(pos, url.data);
+        //        this.$refs.md.$img2Url(pos, url.data);
+        //    })
         },
         imgDel (pos) {
             delete this.imgFile[pos]
