@@ -7,7 +7,16 @@
         <el-breadcrumb-item>活动列表</el-breadcrumb-item>
         <el-breadcrumb-item>活动详情</el-breadcrumb-item>
       </el-breadcrumb>
-      <el-avatar class="head_img" :size="40" :src="circleUrl"></el-avatar>
+
+        <el-dropdown class="head_img" @command="handleCommand">
+          <span class="el-dropdown-link">
+            <el-avatar  :size="40" :src="circleUrl"></el-avatar>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="exit" divided>退出</el-dropdown-item>
+          </el-dropdown-menu>
+      </el-dropdown>
+      
     </div>
 
     <div class="content">
@@ -32,6 +41,15 @@ export default {
         circleUrl: "https://avatars.githubusercontent.com/u/39472071?s=400&u=b68f9c21f2029090a2b5a0f01397372ec70af94e&v=4",
         url: 'http://img.poesy.ink/20190926081202.jpg'
       }
+    },
+    methods:{
+      handleCommand(command) {
+        if(command === 'exit'){
+          this.$store.dispatch('exitUser');
+          this.$message({message:'登出成功！',type:'success'});
+          this.$router.push('/login')
+        }
+      }
     }
 }
 </script>
@@ -49,7 +67,7 @@ export default {
 }
 .head_img{
   float: right;
-  margin: 10px;
+  margin: 10px 20px;
 }
 
 .content{

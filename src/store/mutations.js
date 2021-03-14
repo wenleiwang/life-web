@@ -13,7 +13,6 @@ export default {
         state.reqArticle = reqArticle
     },
     [RECEIVE_ARITCLE] (state, listAritcle){
-        debugger
         state.listAritcle = listAritcle
     },
 
@@ -23,6 +22,7 @@ export default {
 
     [RECEIVE_USER](state, user){
         state.user = user
+        state.Authorization = user.authorization;
     },
     addmu(state){
         state.name++

@@ -40,8 +40,10 @@ import {login} from '../../api'
             message: '登录成功！',
             type: 'success'
           });
-          this.$router.replace('/admin/indexList')
+          // 保存到Vuex
           this.$store.dispatch('login',user.Data)
+          // 跳转
+          this.$router.replace('/admin/indexList')
         }else{
           // 弹框失败
           this.$message({

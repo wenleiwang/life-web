@@ -39,8 +39,17 @@ export default {
         
     },
 
+    // 登录用户
     login({commit,state},user){
+        // 修改token，并将token存入localStorage
+        localStorage.setItem('Authorization', user.authorization);
         commit(RECEIVE_USER,user);
+    },
+    // 登出用户
+    exitUser({commit,state}){
+        // 修改token，删除localStorage中的校验信息
+        localStorage.removeItem('Authorization');
+        commit(RECEIVE_USER,{});
     }
     // 异步获取分类列表
 }

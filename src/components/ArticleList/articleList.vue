@@ -75,7 +75,6 @@ export default {
   computed:{
     listArticleMounted(){
       var data = this.$store.state.listAritcle
-      debugger
       return data
     }
   },
