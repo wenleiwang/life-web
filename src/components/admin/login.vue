@@ -35,15 +35,16 @@ import {login} from '../../api'
       async loginMethod () {
         const user = await login({'loginName':this.loginForm.username,'userPassword':this.loginForm.password})
         if(user.Result === 1){
+          
+          // 保存到Vuex
+          this.$store.dispatch('login',user.Data)
+          // 跳转
+          this.$router.replace('/admin/indexList')
           // 登录成功，保存用户信息
           this.$message({
             message: '登录成功！',
             type: 'success'
           });
-          // 保存到Vuex
-          this.$store.dispatch('login',user.Data)
-          // 跳转
-          this.$router.replace('/admin/indexList')
         }else{
           // 弹框失败
           this.$message({
