@@ -115,13 +115,13 @@ export default {
         helpDocsScrollTop:0,
         classifyList:[
           {id:1,label:'一级1'},
-          {id:1,label:'一级2'},
-          {id:1,label:'一级3'},
-          {id:1,label:'一级4'},
-          {id:1,label:'一级4'},
-          {id:1,label:'一级4'},
-          {id:1,label:'一级4'},
-          {id:1,label:'一级4'},
+          {id:2,label:'一级2'},
+          {id:3,label:'一级3'},
+          {id:4,label:'一级4'},
+          {id:5,label:'一级4'},
+          {id:20,label:'一级4'},
+          {id:6,label:'一级4'},
+          {id:7,label:'一级4'},
         ]
     };
   },
@@ -383,7 +383,11 @@ body {
 }
 .classifyList{
   position: fixed;
-
+  width: 18%;
+  
+}
+.el-tree{
+  background: #f1f2f6;
 }
 .articleHeader{
   margin: 0 auto;
@@ -461,5 +465,8 @@ blockquote {
   border-left: 3px solid green;
   background-color: #ccc;
   margin-left: 1em;
+}
+.is-current{
+ color: #2ed573;
 }
 </style>
