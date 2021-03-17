@@ -32,6 +32,8 @@ export const listTag = (data) => ajax('/admin/listTag',data,'POST')
 // 通过分类ID查用户文章
 export const listTagNameByTagId = (data) => ajax('/admin/listTagNameByTagId',data,'POST')
 
+export const apiUserListClassify = (data) => ajax('/listClassify',data,'GET')
+
 /*************************************************************************** login */
 export const login = (data) => ajax('/login',data,'POST')
 

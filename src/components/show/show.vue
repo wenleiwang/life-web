@@ -13,12 +13,12 @@
             <h3>分类</h3>
             <a class="more" href="#">More</a>
           </div>
-          <li>前后端分离之前端</li>
-          <li>前后端分离之后端</li>
+          <li v-for="item in listClassify" :key="item.classifyId">{{ item.classifyName }}</li>
+          <!-- <li>前后端分离之后端</li>
           <li>我再也没有对你生气</li>
           <li>数据库</li>
           <li>感性生活</li>
-          <li>财富自由</li>
+          <li>财富自由</li> -->
         </div>
         <div id="host_article" class="article_list">
           <div>
@@ -50,13 +50,12 @@ import vfooter from '@/components/show/vfooter'
 import Swiper from 'swiper'
 
 import artcleList from '../ArticleList/articleList'
-
-import { mapGetters, mapActions } from 'vuex'
+import {apiUserListClassify} from '../../api'
 export default {
   name: 'show',
   data(){
     return {
-      
+      listClassify:[],
     }
   },
   computed:{
@@ -69,12 +68,17 @@ export default {
             'pageSize' : 10,
             'pageNum' : 1
         });
-    }
+    },
+    
   },
   created (){
     // 组件创建完后获取数据，
     // 此时 data 已经被 observed 了
     // this.listArticle()
+    
+  },
+  mounted(){
+    this.userListClassify()
   },
   watch: {
     // 如果路由有变化，会再次执行该方法
@@ -86,10 +90,14 @@ export default {
     artcleList
   },
   methods :{
-    addfn(){
-       //提交名为addmu的mutations
-       this.$store.commit('addmu');
-    },    
+   async userListClassify(){
+      debugger
+      const result = await apiUserListClassify({});
+      if(result.Result === 1){
+        this.listClassify = result.Data
+        return result.Data
+      }
+    }
   }
 }
 </script>
