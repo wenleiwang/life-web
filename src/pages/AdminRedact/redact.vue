@@ -130,18 +130,6 @@ export default {
                     type: 'warning'
                 });
             }
-        //     this.$axios({
-        //        url: '/file/upload',
-        //        method: 'post',
-        //        data: formdata,
-        //        headers: { 'Content-Type': 'multipart/form-data;charset=UTF-8' ,
-        //         'aaa':'aaa'
-        //        },
-        //    }).then((url) => {
-        //        // 第二步.将返回的url替换到文本原位置![...](0) -> ![...](url)
-        //     //    this.$vm.$img2Url(pos, url.data);
-        //        this.$refs.md.$img2Url(pos, url.data);
-        //    })
         },
         imgDel (pos) {
             delete this.imgFile[pos]

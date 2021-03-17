@@ -12,10 +12,12 @@
     <el-container>
       <el-aside width="20%">
         <div class="classifyList">
-          <el-tree
+          <h3 class="classifyTitle">{{ articleInfo.classifyName }}</h3>
+          <el-tree ref="tree"
             :data=this.classifyList
             node-key="id"
             default-expand-all
+            @node-click="handleNodeClick"
             @node-drag-start="handleDragStart"
             @node-drag-enter="handleDragEnter"
             @node-drag-leave="handleDragLeave"
@@ -33,20 +35,6 @@
           <div id="seeArticle">
             <div class="inner">
               <el-row :gutter="30" style="color: ">
-                <!-- <el-col :span="2">. -->
-                  <!-- <div class="opt">
-                    <li>
-                      <el-button type="success">评论<i class="el-icon-edit el-icon--right"></i></el-button>
-                    </li>
-                    <li>
-                      <el-button type="warning">点赞<i class="el-icon-star-off el-icon--right"></i></el-button>
-                    </li>
-                    <li @click="goBack">
-                      <el-button type="info">返回<i class="el-icon-back el-icon--right"></i></el-button>
-                    </li>
-                  </div> -->
-                <!-- </el-col> -->
-
                 <el-col :span="16">
                   <div class="markedArticle" v-html="markedDownContent" ref="helpDocs" @scroll="docsScroll"></div>
                 </el-col>
@@ -97,6 +85,8 @@ import hljs from "highlight.js";
 import "highlight.js/styles/tomorrow-night-eighties.css";
 import vheader from '@/components/show/vheader'
 
+import {listArticleFromClassifyId} from '../../api'
+
 let rendererMD = new marked.Renderer();
 let mdContent = ''
 export default {
@@ -106,6 +96,9 @@ export default {
         article: "",
         articleName:"",
         articleContent:"",
+        classifyId : 0,
+        articleInfo:{},
+        classifyArticleList:[],
         navList: [],
         activeIndex: 0,
         docsFirstLevels: [],  // 文档第一级标题
@@ -113,16 +106,7 @@ export default {
         childrenActiveIndex: 0,
         scrollDirection:true,
         helpDocsScrollTop:0,
-        classifyList:[
-          {id:1,label:'一级1'},
-          {id:2,label:'一级2'},
-          {id:3,label:'一级3'},
-          {id:4,label:'一级4'},
-          {id:5,label:'一级4'},
-          {id:20,label:'一级4'},
-          {id:6,label:'一级4'},
-          {id:7,label:'一级4'},
-        ]
+        classifyList:[]
     };
   },
   components :{
@@ -167,7 +151,7 @@ export default {
     // 组件创建完后获取数据，
     // 此时 data 已经被 observed 了
     this.getArticle();
-  },  
+  },
   mounted(){
     window.addEventListener('scroll',this.handleScroll,true);
     window.addEventListener('scroll',this.docsScroll,true);
@@ -175,11 +159,21 @@ export default {
   watch: {
     // 如果路由有变化，会再次执行该方法
     $route: "getArticle",
+    articleInfo(){
+      this.$nextTick( () => {
+        this.getClassifyArticleList()
+      })
+    },
+    classifyList(){
+      this.$nextTick( () => {
+        this.$refs.tree.setCurrentKey(this.$route.query.id)
+      })
+    }
   },
   methods: {
-    getArticle() {
+    async getArticle() {
       // 去后端获取数据
-      this.axios
+      await this.axios
         .get("/getArticle", {
           params: {
             articleId: this.$route.query.id,
@@ -189,10 +183,32 @@ export default {
           if (url.data.Result == 1) {
             this.article = url.data.Data.articleBody;
             this.articleName = url.data.Data.articleName;
+            this.classifyId = url.data.Data.classifyId;
+            this.articleInfo = url.data.Data;
           } else {
             alert(url.data.Message);
           }
         });
+        
+    },
+    // 获取分类的所有文章列表
+    async getClassifyArticleList(){
+      const result = await listArticleFromClassifyId({'classifyId':this.classifyId});
+
+      if(result.Result === 1){
+          this.classifyArticleList = result.Data
+          const list = [];
+          this.classifyArticleList.forEach(e => {
+            var obj1 = {
+              id : 0,
+              label :''
+            }
+            obj1.id = e.articleId;
+            obj1.label = e.articleName
+            list.push(obj1)
+          } )
+          this.classifyList =  list
+      }
     },
     goBack() {
       window.history.length > 1 ? this.$router.go(-1) : this.$router.push("/");
@@ -226,16 +242,18 @@ export default {
       }
     },
     docsScroll() {
-      if (this.titleClickScroll) {
-          return;
-      }
-      let scrollTop = window.pageYOffset || document.documentElement.scrollTop || 
-                document.body.scrollTop
-      let firstLevelIndex = this.getLevelActiveIndex(scrollTop, this.docsFirstLevels)
-      this.currentClick(firstLevelIndex)
+      if(this.$route.path === '/show/seeArticle'){
+        if (this.titleClickScroll) {
+            return;
+        }
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop || 
+                  document.body.scrollTop
+        let firstLevelIndex = this.getLevelActiveIndex(scrollTop, this.docsFirstLevels)
+        this.currentClick(firstLevelIndex)
 
-      let secondLevelIndex = this.getLevelActiveIndex(scrollTop, this.docsSecondLevels)
-      this.childrenCurrentClick(secondLevelIndex)
+        let secondLevelIndex = this.getLevelActiveIndex(scrollTop, this.docsSecondLevels)
+        this.childrenCurrentClick(secondLevelIndex)
+      }
     },
     getLevelActiveIndex(scrollTop, docsLevels) {
       let currentIdx = null;
@@ -262,7 +280,7 @@ export default {
     },
     currentClick(index) {
       this.activeIndex = index
-      this.getDocsSecondLevels(index)
+      // this.getDocsSecondLevels(index)
     },
     getTitle(content) {
       let nav = [];
@@ -286,7 +304,6 @@ export default {
     },
     // 将一级二级标题数据处理成树结构
     handleNavTree() {
-      console.log('0->'+this.article)
       let navs = this.getTitle(this.article)
       let navLevel = [1, 2];
       let retNavs = [];
@@ -347,15 +364,51 @@ export default {
       return ret;
     },
     handleScroll(){
-      // 页面滚动距顶部距离
-      var scrollTop = window.pageYOffset || document.documentElement.scrollTop || 
-                document.body.scrollTop
-      if(scrollTop<70){
-        this.scrollDirection = true;
-      }else{
-        this.scrollDirection = false;
+      if(this.$route.path === '/show/seeArticle'){
+        // 页面滚动距顶部距离
+        var scrollTop = window.pageYOffset || document.documentElement.scrollTop || 
+                  document.body.scrollTop
+        if(scrollTop<70){
+          this.scrollDirection = true;
+        }else{
+          this.scrollDirection = false;
+        }
       }
     },
+    
+    // ****************************** 拖拽
+    handleNodeClick(data) {
+      var id = data.id
+      this.$router.push({name : 'seeArticle' , query:{id}})
+    },
+    handleDragStart(node, ev) {
+        console.log('drag start', node);
+      },
+      handleDragEnter(draggingNode, dropNode, ev) {
+        console.log('tree drag enter: ', dropNode.label);
+      },
+      handleDragLeave(draggingNode, dropNode, ev) {
+        console.log('tree drag leave: ', dropNode.label);
+      },
+      handleDragOver(draggingNode, dropNode, ev) {
+        console.log('tree drag over: ', dropNode.label);
+      },
+      handleDragEnd(draggingNode, dropNode, dropType, ev) {
+        console.log('tree drag end: ', dropNode && dropNode.label, dropType);
+      },
+      handleDrop(draggingNode, dropNode, dropType, ev) {
+        console.log('tree drop: ', dropNode.label, dropType);
+      },
+      allowDrop(draggingNode, dropNode, type) {
+        if (dropNode.data.label === '二级 3-1') {
+          return type !== 'inner';
+        } else {
+          return true;
+        }
+      },
+      allowDrag(draggingNode) {
+        return draggingNode.data.label.indexOf('三级 3-2-2') === -1;
+      }
   }
 };
 </script>
@@ -385,6 +438,10 @@ body {
   position: fixed;
   width: 18%;
   
+}
+.classifyTitle{
+  text-align: left;
+  padding: 0 20px;
 }
 .el-tree{
   background: #f1f2f6;

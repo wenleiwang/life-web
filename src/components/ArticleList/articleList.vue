@@ -1,6 +1,6 @@
 <template>
   <div id="show">
-            <div class="blog_content">
+        <div class="blog_content">
         <!-- 循环列表 -->
         <div class="article_item" v-for="item in listArticleMounted" :key="item.articleId" @click="seeArticle(item.articleId)">
           <div class="article_content">

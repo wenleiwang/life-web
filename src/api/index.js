@@ -14,6 +14,9 @@ export const deleteArticle = (data) => ajax('/admin/deleteArticle',data,'GET')
 // 获取一条文章详情
 export const getArticle = (data) => ajax('/admin/getArticle',data,'GET')
 
+// 通过分类ID查用户文章
+export const listArticleFromClassifyId = (data) => ajax('/admin/listArticleFromClassifyId',data,'GET')
+
 
 /*************************************************************************** classify */
 // 用户分类删除

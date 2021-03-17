@@ -20,7 +20,7 @@ export default {
         // 发送异步ajax请求
         
         const result = await test()
-        if(result.Result === 0){
+        if(result.Result === 1){
             const listAritcle = result.Data
             // 根据结果提交一个mutation
         }
