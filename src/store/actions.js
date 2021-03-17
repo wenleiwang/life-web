@@ -3,6 +3,7 @@
  */
 
 import {
+    RECEIVE_TOTAL_COUNT,
     RECEIVE_ARITCLE,
     RECEIVE_REQ_ARITCLE,
     RECEIVE_CLASSIFY,
@@ -33,8 +34,10 @@ export default {
         const result = await listArticle(data)
         if(result.Result === 1){
             const listAritcle = result.Data
+            const articleTotal = result.TotalCount
             // 根据结果提交一个mutation
             commit(RECEIVE_ARITCLE,listAritcle)
+            commit(RECEIVE_TOTAL_COUNT,articleTotal)
         }
         
     },

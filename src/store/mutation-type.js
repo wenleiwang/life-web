@@ -8,3 +8,5 @@ export const RECEIVE_ARITCLE = 'listAritcle'
 export const RECEIVE_CLASSIFY = 'classifyList'
 
 export const RECEIVE_USER = 'user'
+
+export const RECEIVE_TOTAL_COUNT = 'articleTotal'

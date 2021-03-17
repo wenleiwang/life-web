@@ -6,6 +6,7 @@ export default {
     user:{},
     Authorization:'',
     reqAritcle:{},// 文章列表
+    articleTotal:0,
     listAritcle:[],
     reqClassify:[],
     listClassify:[],

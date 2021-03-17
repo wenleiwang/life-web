@@ -236,7 +236,7 @@ export default {
       let navChildren = this.navList[idx].children
       if(navChildren.length > 0) {
           secondLevels = navChildren.map((item)=>{
-              return this.$el.querySelector(`#data-${item.index}`).offsetTop - 60
+            return this.$el.querySelector(`#data-${item.index}`).offsetTop - 60
           })
           this.docsSecondLevels = secondLevels;
       }
@@ -275,12 +275,13 @@ export default {
     },
     pageJump(id) {
       this.titleClickScroll = true;
-      document.documentElement.scrollTop = this.$el.querySelector(`#data-${id}`).offsetTop - 40;
+      console.log(this.$el.querySelector(`#data-${id}`).offsetTop)
+      document.documentElement.scrollTop = this.$el.querySelector(`#data-${id}`).offsetTop - 20;
       setTimeout(() => this.titleClickScroll = false, 100);
     },
     currentClick(index) {
       this.activeIndex = index
-      // this.getDocsSecondLevels(index)
+      this.getDocsSecondLevels(index)
     },
     getTitle(content) {
       let nav = [];
@@ -420,7 +421,9 @@ body {
   background: #fff;
   box-sizing: border-box;
 }
-
+.el-container{
+  /* height: 100%; */
+}
 .el-header ,.el-footer{
   background-color: #2c3e50;
   color: #fff;

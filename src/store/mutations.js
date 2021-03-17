@@ -2,6 +2,7 @@
  * 直接更新state多个方法的对象
  */
 import {
+    RECEIVE_TOTAL_COUNT,
     RECEIVE_ARITCLE,
     RECEIVE_CLASSIFY,
     RECEIVE_REQ_ARITCLE,
@@ -14,6 +15,9 @@ export default {
     },
     [RECEIVE_ARITCLE] (state, listAritcle){
         state.listAritcle = listAritcle
+    },
+    [RECEIVE_TOTAL_COUNT] (state, articleTotal){
+        state.articleTotal = articleTotal
     },
 
     [RECEIVE_CLASSIFY](state, {listClassify}){

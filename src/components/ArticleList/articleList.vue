@@ -32,10 +32,10 @@
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
               :current-page.sync="currentPage"
-              :page-sizes="[20, 40, 60, 100]"
+              :page-sizes="[5, 20, 40, 60]"
               :page-size="pageSize"
               layout="total, sizes, prev, pager, next, jumper"
-              :total="articleTotal">
+              :total="articleTotalComputed">
             </el-pagination>
           </div>
           
@@ -53,7 +53,7 @@ export default {
   data(){
     return {
       list :[],
-      pageSize:20,
+      pageSize:10,
       currentPage: 1,
       articleTotal:0,
       options: [
@@ -76,6 +76,9 @@ export default {
     listArticleMounted(){
       var data = this.$store.state.listAritcle
       return data
+    },
+    articleTotalComputed(){
+      return this.$store.state.articleTotal
     }
   },
   methods:{
