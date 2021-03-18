@@ -197,6 +197,7 @@ body{
   margin: 0;
   width: 230px;
   background-color: #D3DCE6;
+  height: 100%;
 }
 .el-aside > ul > li{
   width: 100%;

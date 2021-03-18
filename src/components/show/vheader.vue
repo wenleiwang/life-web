@@ -6,7 +6,7 @@
             <ul>
                 <li @click="toIndex">首页</li>
                 <li @click="toClassify">分类</li>
-                <li @click="toIndex">归档</li>
+                <li @click="toPigeonhole">归档</li>
                 <li @click="toShowMe">关于我</li>
             </ul>
 
