@@ -111,7 +111,7 @@ export default {
 .blog_content{
   margin: 5px auto;
   width: 95%;
-  height: 100%;
+  /* height: 100%; */
   float: left;
   border-radius: 5px;
   background-color: #FFFFFF;
