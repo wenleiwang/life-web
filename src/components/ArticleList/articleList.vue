@@ -32,7 +32,7 @@
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
               :current-page.sync="currentPage"
-              :page-sizes="[10, 20, 40, 60]"
+              :page-sizes="[10, 20, 40, 80]"
               :page-size="pageSize"
               layout="total, sizes, prev, pager, next, jumper"
               :total="articleTotalComputed">
@@ -50,12 +50,12 @@
 <script>
 
 export default {
+  props:{
+    pageSize:Number,
+    currentPage:Number
+  },
   data(){
     return {
-      list :[],
-      pageSize:10,
-      currentPage: 1,
-      articleTotal:0,
       options: [
         {
             value: "0",
@@ -86,22 +86,10 @@ export default {
       this.$router.push({name : 'seeArticle' , query:{id}})
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
-      this.pageSize = val;
-      this.$store.dispatch('listAritcle',{
-            'search' : '',
-            'pageSize' : this.pageSize,
-            'pageNum' : this.currentPage
-        });
+      this.$emit('handle-size-change',val);
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
-      this.currentPage = val;
-      this.$store.dispatch('listAritcle',{
-            'search' : '',
-            'pageSize' : this.pageSize,
-            'pageNum' : this.currentPage
-        });
+      this.$emit('handle-current-change',val);
     }
   }
 }

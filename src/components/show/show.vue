@@ -5,7 +5,7 @@
       <div class="content_pic">这里是pic</div>
       
       <div class="content_list">
-        <artcleList/>
+        <artcleList @handle-size-change="handleSizeChange" @handle-current-change="handleCurrentChange" :pageSize = "pageSize" :currentPage = "currentPage"/>
       </div>
       <div class="indexLeft">
         <div id="classify" class="article_list">
@@ -56,6 +56,10 @@ export default {
   data(){
     return {
       listClassify:[],
+      pageSize:10,
+      currentPage: 1,
+      search:'',
+      classifyId:0
     }
   },
   computed:{
@@ -63,11 +67,7 @@ export default {
       return this.$store.state.name;
     },
     listArticleAddToStore(){
-      this.$store.dispatch('listAritcle',{
-            'search' : '',
-            'pageSize' : 10,
-            'pageNum' : 1
-        });
+      this.get()
     },
     
   },
@@ -97,7 +97,24 @@ export default {
         this.listClassify = result.Data
         return result.Data
       }
+    },
+    get(){
+      this.$store.dispatch('listAritcle',{
+        'search' : this.search,
+        'pageSize' : this.pageSize,
+        'pageNum' : this.currentPage,
+        'classifyId' : this.classifyId
+      });
+    },
+    handleSizeChange(val){
+      this.pageSize = val;
+      this.get()
+    },
+    handleCurrentChange(val){
+      this.currentPage = val;
+      this.get()
     }
+  
   }
 }
 </script>
