@@ -8,12 +8,13 @@
         <el-aside width="25%">
           <ul>
             <li v-for="item in listClassify" :key="item.classifyId">
-              <a href="javascript:;" @click="get(item.classifyId)">{{ item.classifyName }}</a>
+              <h3><a href="javascript:;" @click="get(item.classifyId)" :class="{onClassify: classifyId == item.classifyId}">{{ item.classifyName }}</a></h3>
             </li>
           </ul>
         </el-aside>
         <el-main>
-          <artcleList @handle-size-change="handleSizeChange" @handle-current-change="handleCurrentChange" :pageSize = "pageSize" :currentPage = "currentPage"/>
+          <artcleList  v-if="this.$store.state.listAritcle.length  > 0" @handle-size-change="handleSizeChange" @handle-current-change="handleCurrentChange" :pageSize = "pageSize" :currentPage = "currentPage"/>
+          <nodata v-else/>
         </el-main>
       </el-container>
     </el-container>
@@ -26,6 +27,7 @@
 import vheader from '@/components/show/vheader'
 import vfooter from '@/components/show/vfooter'
 import artcleList from '../ArticleList/articleList'
+import nodata from '../error/nodata'
 
 import {apiUserListClassify} from '../../api'
 export default {
@@ -39,7 +41,7 @@ export default {
       listClassify:[
         {'classifyId':1,'classifyName':'测试'}
 
-      ]
+      ],
     }
   },
   created (){
@@ -52,19 +54,17 @@ export default {
     '$route': 'userListClassify'
   },
   computed:{
-    listClassifyComputed(){
-      return this.listClassify;
-    },
     
   },
   components :{
     vheader,
     vfooter,
-    artcleList
+    artcleList,
+    nodata
   },
   methods :{
     get(classifyId){
-      console.log(classifyId)
+      this.classifyId = classifyId;
       this.$store.dispatch('listAritcle',{
         'search' : this.search,
         'pageSize' : this.pageSize,
@@ -84,6 +84,8 @@ export default {
       const result = await apiUserListClassify({});
       if(result.Result === 1){
         this.listClassify = result.Data
+      }else{
+        this.$message.error('请求失败！');
       }
     },
   }
@@ -157,6 +159,12 @@ body{
   width: 100%;
   list-style: none;
   flex-shrink: 0;
+}
+.onClassify{
+  color: #2ed573;
+}
+.el-aside > ul > li > h3 > a:hover{
+  color: #ff6348;
 }
 
 .el-main {

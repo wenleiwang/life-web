@@ -11,9 +11,10 @@
         <div id="classify" class="article_list">
           <div>
             <h3>分类</h3>
-            <a class="more" href="#">More</a>
+            <a class="more" href="#" @click="toClassify">More</a>
           </div>
-          <li v-for="item in listClassify" :key="item.classifyId">{{ item.classifyName }}</li>
+          <li @click="get()">全部</li>
+          <li v-for="item in listClassify" :key="item.classifyId" @click="getClassifyAritcle(item.classifyId)">{{ item.classifyName }}</li>
           <!-- <li>前后端分离之后端</li>
           <li>我再也没有对你生气</li>
           <li>数据库</li>
@@ -23,7 +24,6 @@
         <div id="host_article" class="article_list">
           <div>
             <h3>热门文章</h3>
-            <a class="more" href="#">More</a>
           </div>
           <li><span class="group_num1">1</span><h3>适合做logo的字体有哪些?</h3></li>
           <li><span class="group_num2">2</span><h3>朋友的“局”</h3></li>
@@ -91,19 +91,27 @@ export default {
   },
   methods :{
    async userListClassify(){
-      debugger
       const result = await apiUserListClassify({});
       if(result.Result === 1){
         this.listClassify = result.Data
         return result.Data
       }
     },
+    getClassifyAritcle(classifyId){
+      this.classifyId = classifyId;
+      this.$store.dispatch('listAritcle',{
+        'search' : this.search,
+        'pageSize' : this.pageSize,
+        'pageNum' : this.currentPage,
+        'classifyId' : classifyId
+      });
+    },
     get(){
       this.$store.dispatch('listAritcle',{
         'search' : this.search,
         'pageSize' : this.pageSize,
         'pageNum' : this.currentPage,
-        'classifyId' : this.classifyId
+        'classifyId' : 0
       });
     },
     handleSizeChange(val){
@@ -113,6 +121,9 @@ export default {
     handleCurrentChange(val){
       this.currentPage = val;
       this.get()
+    },
+    toClassify(){
+      this.$router.push({ name: 'classify' })
     }
   
   }
@@ -200,10 +211,16 @@ body{
   padding: 5px;
 }
 
+#classify > li:hover{
+  cursor: pointer;
+}
+
 #host_article > li{
   margin: 10px 10px;
   list-style: none;
 }
+
+
 
 #host_article > li > h3{
   color: #333333;

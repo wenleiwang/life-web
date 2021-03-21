@@ -1,7 +1,7 @@
 <template>
     <div class="black_colore">
         <div class="harder_body">
-            <h3 class="harder_logo">Wenwen</h3>
+            <h3 class="harder_logo" @click="toIndex">Wenwen</h3>
 
             <ul>
                 <li @click="toIndex">首页</li>
@@ -11,8 +11,11 @@
             </ul>
 
             <div class="harder_search">
-                <li><input type="text"></li>
-                <li><img src="@/assets/search.png" alt=""></li>
+              <!-- form发起请求但不跳转 -->
+              <form @submit.prevent="submit">
+                <li><input type="text"  v-model="search"></li>
+                <li><img src="@/assets/search.png" alt="" @click="submit"></li>
+              </form>
             </div>
         </div>
     </div>
@@ -23,7 +26,8 @@ export default {
     name: 'admin-header',
     data: function(){
         return {
-            count : 0
+            count : 0,
+            search:'',
         }
     },
     methods:{
@@ -38,6 +42,14 @@ export default {
       },
       toShowMe(){
         this.$router.push({ name: 'showMe' })
+      },
+      submit(){
+        console.log('测试点击')
+        let routeUrl = this.$router.resolve({
+          path: "/search",
+          query: {search:this.search}
+        });
+        window.open(routeUrl.href, '_blank');
       }
     }
 }
@@ -86,6 +98,9 @@ body{
 .harder_body > ul > li:hover{
   cursor: pointer;
 }
+.harder_body > h3{
+  cursor: pointer;
+}
 
 .harder_search{
   float: right;
@@ -100,13 +115,13 @@ body{
   border: 1px solid #2ED573;
 }
 
-.harder_search > li{
+.harder_search > form > li{
   list-style: none;
   float: left;
   height: 23px;
 }
 
-.harder_search > li > input{
+.harder_search > form > li > input{
   width: 350px;
   height: 23px;
   border: 1px;
@@ -119,14 +134,14 @@ body{
   padding-right: 5px;
 }
 
-.harder_search > li > img{
+.harder_search > form > li > img{
   float: left;
   width: 23px;
   height: 23px;
   background-color: #FFFFFF;
   border-radius: 0px 3px 3px 0px;
 }
-.harder_search > li > img:hover{
+.harder_search > form > li > img:hover{
   /* 鼠标变成小手 */
   cursor: pointer;
 }

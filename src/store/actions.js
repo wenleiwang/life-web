@@ -24,6 +24,8 @@ export default {
         if(result.Result === 1){
             const listAritcle = result.Data
             // 根据结果提交一个mutation
+        }else{
+            this.$massage.error("请求分类列表失败！");
         }
         
     },

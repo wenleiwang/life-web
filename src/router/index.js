@@ -22,6 +22,7 @@ import adminIndex from '@/components/admin/adminIndex'
 import login from '@/components/admin/login'
 
 import show from '@/components/show/show.vue'
+import search from '@/components/show/search.vue'
 import classify from '@/components/show/classify.vue'
 import pigeonhole from '@/components/show/pigeonhole.vue'
 import showMe from '@/components/show/showMe.vue'
@@ -35,6 +36,8 @@ import me from '@/pages/Me/me.vue'
 import updatePassword from '@/pages/updatePassword/updatePassword.vue'
 import indexList from '@/pages/IndexList/indexList.vue'
 import adminArticleList from '@/pages/ArticleList/articleList.vue'
+
+// ERROR下的路由
 
 // 定义routes路由的集合，数组类型
 const routes=[
@@ -56,6 +59,11 @@ const routes=[
     path : '/showMe',
     component:showMe,
     name: 'showMe'
+  },
+  {
+    path : '/search',
+    component:search,
+    name: 'search'
   },
   {
     path:'/admin/',
