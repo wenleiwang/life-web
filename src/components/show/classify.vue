@@ -7,49 +7,13 @@
       <el-container class="body-container">
         <el-aside width="25%">
           <ul>
-            <li>测试斯蒂芬就爱浪费</li>
-            <li>测试斯蒂芬就爱浪费</li>
-            <li>测试斯蒂芬就爱浪费</li>
-            <li>测试斯蒂芬就爱浪费</li>
-            <li>测试斯蒂芬就爱浪费</li>
-            <li>测试斯蒂芬就爱浪费</li>
-            <li>测试斯蒂芬就爱浪费</li>
-            <li>测试斯蒂芬就爱浪费</li>
-            <li>测试斯蒂芬就爱浪费</li>
-            <li>测试斯蒂芬就爱浪费</li>
-            <li>测试斯蒂芬就爱浪费</li>
-            <li>测试斯蒂芬就爱浪费</li>
-            <li>测试斯蒂芬就爱浪费</li>
-            <li>测试斯蒂芬就爱浪费</li>
-            <li>测试斯蒂芬就爱浪费1</li>
-            <li>测试斯蒂芬就爱浪费</li>
-            <li>测试斯蒂芬就爱浪费</li>
-            <li>测试斯蒂芬就爱浪费</li>
-            <li>测试斯蒂芬就爱浪费</li>
-            <li>测试斯蒂芬就爱浪费</li>
-            <li>测试斯蒂芬就爱浪费</li>
-            <li>测试斯蒂芬就爱浪费</li>
-            <li>测试斯蒂芬就爱浪费</li>
-            <li>测试斯蒂芬就爱浪费</li>
-            <li>测试斯蒂芬就爱浪费</li>
-            <li>测试斯蒂芬就爱浪费</li>
-            <li>测试斯蒂芬就爱浪费2</li>
-            <li>测试斯蒂芬就爱浪费2</li>
-            <li>测试斯蒂芬就爱浪费2</li>
-            <li>测试斯蒂芬就爱浪费2</li>
-            <li>测试斯蒂芬就爱浪费2</li>
-            <li>测试斯蒂芬就爱浪费2</li>
-            <li>测试斯蒂芬就爱浪费2</li>
-            <li>测试斯蒂芬就爱浪费2</li>
-            <li>测试斯蒂芬就爱浪费2</li>
-            <li>测试斯蒂芬就爱浪费2</li>
-            <li>测试斯蒂芬就爱浪费2</li>
-            <li>测试斯蒂芬就爱浪费2</li>
-            <li>测试斯蒂芬就爱浪费2</li>
+            <li v-for="item in listClassify" :key="item.classifyId">
+              <a href="javascript:;" @click="get(item.classifyId)">{{ item.classifyName }}</a>
+            </li>
           </ul>
         </el-aside>
         <el-main>
-          <artcleList/>
+          <artcleList @handle-size-change="handleSizeChange" @handle-current-change="handleCurrentChange" :pageSize = "pageSize" :currentPage = "currentPage"/>
         </el-main>
       </el-container>
     </el-container>
@@ -62,38 +26,36 @@
 import vheader from '@/components/show/vheader'
 import vfooter from '@/components/show/vfooter'
 import artcleList from '../ArticleList/articleList'
+
+import {apiUserListClassify} from '../../api'
 export default {
   name: 'show',
   data(){
     return {
-      list :[],
       pageSize:20,
       currentPage: 1,
-      articleTotal:0,
-      options: [
-        {
-            value: "0",
-            label: "原创"
-        },
-        {
-            value: "1",
-            label: "转载"
-        },
-        {
-            value: "2",
-            label: "翻译"
-        }
+      classifyId:0,
+      search:'',
+      listClassify:[
+        {'classifyId':1,'classifyName':'测试'}
+
       ]
     }
   },
   created (){
     // 组件创建完后获取数据，
     // 此时 data 已经被 observed 了
-    this.listArticle()
+    this.userListClassify()
   },
   watch: {
     // 如果路由有变化，会再次执行该方法
-    '$route': 'listArticle'
+    '$route': 'userListClassify'
+  },
+  computed:{
+    listClassifyComputed(){
+      return this.listClassify;
+    },
+    
   },
   components :{
     vheader,
@@ -101,37 +63,29 @@ export default {
     artcleList
   },
   methods :{
-    listArticle(){
-      this.axios.get('/listArticle',{
-        
-        params:{
-          search:'',
-          pageNum:this.currentPage,
-          pageSize:this.pageSize
-        }
-      }).then((response) => {
-        console.log(response.data)
-        if(response.data.Result == 1){
-          this.list = response.data.Data
-          this.articleTotal = response.data.TotalCount
-        }else{
-          alert(response.data.Message)
-        }
-      })
+    get(classifyId){
+      console.log(classifyId)
+      this.$store.dispatch('listAritcle',{
+        'search' : this.search,
+        'pageSize' : this.pageSize,
+        'pageNum' : this.currentPage,
+        'classifyId' : classifyId
+      });
     },
-    seeArticle(id){
-      this.$router.push({name : 'seeArticle' , query:{id}})
-    },
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+    handleSizeChange(val){
       this.pageSize = val;
-      this.listArticle()
+      this.get()
     },
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+    handleCurrentChange(val){
       this.currentPage = val;
-      this.listArticle()
-    }
+      this.get()
+    },
+    async userListClassify(){
+      const result = await apiUserListClassify({});
+      if(result.Result === 1){
+        this.listClassify = result.Data
+      }
+    },
   }
 }
 </script>
