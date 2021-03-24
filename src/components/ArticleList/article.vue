@@ -40,13 +40,16 @@
 import marked from "marked";
 
 import hljs from "highlight.js";
-import "highlight.js/styles/tomorrow-night-eighties.css";
+// import "highlight.js/styles/tomorrow-night-eighties.css";
+import "highlight.js/styles/monokai-sublime.css";
 import vheader from '@/components/show/vheader'
+// import Tocify from './tocify.tsx'
 
 import {listArticleFromClassifyId} from '../../api'
 
 let rendererMD = new marked.Renderer();
 let mdContent = ''
+let tocify = new Tocify()
 export default {
   name: "seeArticle",
   data() {
@@ -74,19 +77,19 @@ export default {
   computed: {
     markedDownContent: function () {
         marked.setOptions({
-            renderer: rendererMD,
-            highlight: function (code) {
-                return hljs.highlightAuto(code).value;
-            },
-            pedantic: false,//默认为false。 尽可能地兼容 markdown.pl的晦涩部分。不纠正原始模型任何的不良行为和错误。
-            gfm: true,//默认为true。 允许 Git Hub标准的markdown.
-            tables: true,//默认为true。 允许支持表格语法。该选项要求 gfm 为true。
-            breaks: false,//默认为false。 允许回车换行。该选项要求 gfm 为true。
-            sanitize: false,//对输出进行过滤（清理）
-            smartLists: true,
-            smartypants: false,//使用更为时髦的标点，比如在引用语法中加入破折号。
-            xhtml: false,
-        });
+        renderer: rendererMD,  // 这个是必须填写的
+        gfm: true,  // 启动类似Github样式的Markdown,
+        pedantic: false,  // 只解析符合Markdown定义的，不修正Markdown的错误
+        sanitize: false,  // 原始输出，忽略HTML标签
+        tables: true,  // 支持Github形式的表格，必须打开gfm选项
+        breaks: false,  // 支持Github换行符，必须打开gfm选项
+        smartLists: true,  // 优化列表输出
+        smartypants: false,
+        // 高亮显示规则 ，这里使用highlight.js来完成
+        highlight: function (code) {
+          return hljs.highlightAuto(code).value;
+        }
+      })
         let index = 0;
         rendererMD.heading = function(text, level) {
           
@@ -95,11 +98,14 @@ export default {
           } else {
               return `<h${level}>${text}</h${level}>`;
           }
+          // const anchor = tocify.add(text, level);
+          // return `<a id="${anchor}" href="#${anchor}" class="anchor-fix"><h${level}>${text}</h${level}></a>\n`;
         };
             // https://my.oschina.net/u/4326108/blog/3675135
         this.navList = this.handleNavTree();
         this.getDocsFirstLevels(0);
-      return marked(this.content).replace(/<pre>/g, "<pre class='hljs'>");
+      // return marked(this.content).replace(/<pre>/g, "<pre class='hljs'>");
+      return marked(this.content)
     },
     content() {
       return this.article
@@ -150,6 +156,8 @@ export default {
         });
         
     },
+
+
     // 获取分类的所有文章列表
     async getClassifyArticleList(){
       const result = await listArticleFromClassifyId({'classifyId':this.classifyId});
@@ -434,4 +442,115 @@ blockquote {
   background-color: #ccc;
   margin-left: 1em;
 }
+
+/* 代码块 */
+code {
+  margin: 0 5px;
+  padding: 2px 5px;
+  background-color: #ffe0e0;
+  color: #ff502c;
+  border-radius: 5px;
+}
+
+/* 代码块 */
+pre > code {
+    display: block;
+    padding: 10px;
+    margin: 10px 0;
+    background-color: #333;
+    border-radius: 5px;
+    overflow-y: auto;
+    color: #FFF;
+    font-family: Menlo, monospace;
+}
+
+.bread-div{
+    padding: .5rem;
+    border-bottom:1px solid #eee;
+    background-color: #e1f0ff;
+}
+.detailed-title{
+    font-size: 1.8rem;
+    text-align: center;
+    padding: 1rem;
+}
+.center{
+    text-align: center;
+}
+.detailed-content{
+    padding: 1.3rem;
+    font-size: 1rem;
+}
+pre{
+    display: block;
+    background-color:#f3f3f3;
+     padding: .5rem !important;
+     overflow-y: auto;
+     font-weight: 300;
+     font-family: Menlo, monospace;
+     border-radius: .3rem;
+}
+pre{
+    background-color: #283646 !important;
+}
+pre >code{
+    border:0px !important;
+    background-color: #283646 !important;
+    color:#FFF;
+
+}
+code {
+    display: inline-block ;
+    background-color:#f3f3f3;
+    border:1px solid #fdb9cc;
+    border-radius:3px;
+    font-size: 12px;
+    padding-left: 5px;
+    padding-right: 5px;
+    color:#4f4f4f;
+    margin: 0px 3px;
+
+}
+
+.title-anchor{
+    color:#888 !important;
+    padding:4px !important;
+    margin: 0rem !important;
+    height: auto !important;
+    line-height: 1.2rem !important;
+    font-size: .7rem !important;
+    border-bottom: 1px dashed #eee;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+}
+.active{
+    color:rgb(30, 144, 255) !important;
+}
+.nav-title{
+    text-align: center;
+    color: #888;
+    border-bottom: 1px solid rgb(30, 144, 255);
+
+}
+.article-menu{
+    font-size:12px;
+}
+iframe{
+    height: 34rem;
+}
+.detailed-content  img{
+    width: 100%;
+    border:1px solid #f3f3f3;
+}
+.title-level3{
+    display: none !important;
+}
+.ant-anchor-link-title{
+    font-size: 12px !important;
+}
+.ant-anchor-wrapper{
+    padding: 5px !important;
+}
+
 </style>

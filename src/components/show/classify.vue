@@ -79,7 +79,7 @@
           </ul>
         </el-aside>
         <el-main>
-          <artcle/>
+          <artcle :initial-value="initialCalue"/>
           <!-- <artcleList  v-if="this.$store.state.listAritcle.length  > 0" @handle-size-change="handleSizeChange" @handle-current-change="handleCurrentChange" :pageSize = "pageSize" :currentPage = "currentPage"/>
           <nodata v-else/> -->
         </el-main>
@@ -102,6 +102,7 @@ export default {
   name: 'show',
   data(){
     return {
+      initialCalue,
       pageSize:20,
       currentPage: 1,
       classifyId:0,
@@ -155,13 +156,14 @@ export default {
     // 组件创建完后获取数据，
     // 此时 data 已经被 observed 了
     this.userListClassify()
+    this.getArticle()
   },
   watch: {
     // 如果路由有变化，会再次执行该方法
     '$route': 'userListClassify'
   },
   computed:{
-    
+
   },
   components :{
     vheader,
@@ -196,6 +198,23 @@ export default {
         this.$message.error('请求失败！');
       }
     },
+    async getArticle() {
+      // 去后端获取数据
+      await this.axios
+        .get("/getArticle", {
+          params: {
+            articleId: 22,
+          },
+        })
+        .then((url) => {
+          if (url.data.Result == 1) {
+            this.initialCalue = url.data.Data.articleBody;
+          } else {
+            return null;
+          }
+        });
+        
+    }
   }
 }
 </script>
