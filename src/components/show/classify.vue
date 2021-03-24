@@ -5,16 +5,83 @@
         <vheader></vheader>
       </el-header>
       <el-container class="body-container">
-        <el-aside width="25%">
+        <el-aside width="230px" style="padding: 0; background-color:#ffffff">
           <ul>
-            <li v-for="item in listClassify" :key="item.classifyId">
+            <!-- <li v-for="item in listClassify" :key="item.classifyId">
               <h3><a href="javascript:;" @click="get(item.classifyId)" :class="{onClassify: classifyId == item.classifyId}">{{ item.classifyName }}</a></h3>
-            </li>
+            </li> -->
+            <el-collapse v-model="activeName" accordion>
+              <el-collapse-item title="书名" name="1">
+                <el-collapse v-model="activeName" accordion >
+                  <el-collapse-item title="第一章" name="1" >
+                    <div>
+                      <h3>与现实生活一致</h3>
+                      <el-tree :data="tree" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+                    </div>
+                  </el-collapse-item>
+                  <el-collapse-item title="第二章" name="2">
+                    <div>
+                      <h3>在界面中一致</h3>
+                      <el-tree :data="tree" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+                    </div>
+                  </el-collapse-item>
+                </el-collapse>
+              </el-collapse-item>
+              <el-collapse-item title="反馈 Feedback" name="2">
+                <el-collapse v-model="activeName" accordion>
+                  <el-collapse-item title="与现实生活一致" name="1">
+                    <div>
+                      <h3>与现实生活一致</h3>
+                      <el-tree :data="tree" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+                    </div>
+                  </el-collapse-item>
+                  <el-collapse-item title="与现实生活一致" name="2">
+                    <div>
+                      <h3>在界面中一致</h3>
+                      <el-tree :data="tree" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+                    </div>
+                  </el-collapse-item>
+                </el-collapse>
+              </el-collapse-item>
+              <el-collapse-item title="效率 Efficiency" name="3">
+                <el-collapse v-model="activeName" accordion>
+                  <el-collapse-item title="与现实生活一致" name="1">
+                    <div>
+                      <h3>与现实生活一致</h3>
+                      <el-tree :data="tree" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+                    </div>
+                  </el-collapse-item>
+                  <el-collapse-item title="与现实生活一致" name="2">
+                    <div>
+                      <h3>在界面中一致</h3>
+                      <el-tree :data="tree" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+                    </div>
+                  </el-collapse-item>
+                </el-collapse>
+              </el-collapse-item>
+              <el-collapse-item title="可控 Controllability" name="4">
+                <el-collapse v-model="activeName" accordion>
+                  <el-collapse-item title="与现实生活一致" name="1">
+                    <div>
+                      <h3>与现实生活一致</h3>
+                      <el-tree :data="tree" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+                    </div>
+                  </el-collapse-item>
+                  <el-collapse-item title="与现实生活一致" name="2">
+                    <div>
+                      <h3>在界面中一致</h3>
+                      <el-tree :data="tree" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+                    </div>
+                  </el-collapse-item>
+                </el-collapse>
+              </el-collapse-item>
+            </el-collapse>
           </ul>
         </el-aside>
         <el-main>
-          <artcleList  v-if="this.$store.state.listAritcle.length  > 0" @handle-size-change="handleSizeChange" @handle-current-change="handleCurrentChange" :pageSize = "pageSize" :currentPage = "currentPage"/>
-          <nodata v-else/>
+          <artcle/>
+          <!-- <artcleList  v-if="this.$store.state.listAritcle.length  > 0" @handle-size-change="handleSizeChange" @handle-current-change="handleCurrentChange" :pageSize = "pageSize" :currentPage = "currentPage"/>
+          <nodata v-else/> -->
         </el-main>
       </el-container>
     </el-container>
@@ -27,6 +94,7 @@
 import vheader from '@/components/show/vheader'
 import vfooter from '@/components/show/vfooter'
 import artcleList from '../ArticleList/articleList'
+import artcle from '../ArticleList/article'
 import nodata from '../error/nodata'
 
 import {apiUserListClassify} from '../../api'
@@ -42,6 +110,45 @@ export default {
         {'classifyId':1,'classifyName':'测试'}
 
       ],
+      tree:[{
+          label: '一级 1',
+          children: [{
+            label: '二级 1-1',
+            children: [{
+              label: '三级 1-1-1'
+            }]
+          }]
+        }, {
+          label: '一级 2',
+          children: [{
+            label: '二级 2-1',
+            children: [{
+              label: '三级 2-1-1'
+            }]
+          }, {
+            label: '二级 2-2',
+            children: [{
+              label: '三级 2-2-1'
+            }]
+          }]
+        }, {
+          label: '一级 3',
+          children: [{
+            label: '二级 3-1',
+            children: [{
+              label: '三级 3-1-1'
+            }]
+          }, {
+            label: '二级 3-2',
+            children: [{
+              label: '三级 3-2-1'
+            }]
+          }]
+        }],
+        defaultProps: {
+          children: 'children',
+          label: 'label'
+        }
     }
   },
   created (){
@@ -60,7 +167,8 @@ export default {
     vheader,
     vfooter,
     artcleList,
-    nodata
+    nodata,
+    artcle
   },
   methods :{
     get(classifyId){
@@ -116,16 +224,16 @@ body{
 }
 
 .body-container{
-  width: 900px;
+  width: 70%;
   margin: 72px auto 10px auto;
 
 }
 .el-aside {
-  background-color: #D3DCE6;
   color: #333;
   text-align: center;
   line-height: 40px;
   height: 100%;
+  /* border-right: 1px solid #747d8c; */
 }
 
 .el-aside > ul::-webkit-scrollbar {
@@ -152,7 +260,7 @@ body{
   padding: 0;
   margin: 0;
   width: 230px;
-  background-color: #D3DCE6;
+  /* background-color: #D3DCE6; */
   height: 100%;
 }
 .el-aside > ul > li{
@@ -168,12 +276,11 @@ body{
 }
 
 .el-main {
-  background-color: #E9EEF3;
+  /* background-color: #E9EEF3; */
   color: #333;
   padding: 0;
   padding-top: 10px;
-  padding-left: 10px;
-  height: 100%;
+  /* height: 100%; */
   overflow:inherit;
 }
 
@@ -183,6 +290,32 @@ body{
   width: 100%;
   z-index: 99;
 }
-  
 
+ul > .el-collapse > .el-collapse-item > div > .el-collapse-item__header
+{
+  padding-left: 5px;
+  border-right: 1px solid #747d8c;
+  border-radius: 2px;
+}
+ul > .el-collapse > .el-collapse-item > div >.is-active{
+  border-left: 2px solid #ff6348;
+}
+ul > .el-collapse > .el-collapse-item > .el-collapse-item__wrap > .el-collapse-item__content {
+  padding-bottom: 0;
+  border-bottom: 0px;
+}
+ul > .el-collapse > .el-collapse-item > .el-collapse-item__wrap > .el-collapse-item__content > .el-collapse > .el-collapse-item > div > .el-collapse-item__header{
+  padding-left: 20px;
+  border-radius: 2px;
+  height: 30px;
+}
+ul > .el-collapse > .el-collapse-item > .el-collapse-item__wrap > .el-collapse-item__content > .el-collapse > .el-collapse-item > div > .is-active{
+  border-left: 2px solid #ffa502;
+  color: #ffa502;
+  height: 30px;
+}
+
+.is-expanded{
+  color: #2ed573;
+}
 </style>
