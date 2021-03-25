@@ -49,7 +49,7 @@ import {listArticleFromClassifyId} from '../../api'
 
 let rendererMD = new marked.Renderer();
 let mdContent = ''
-let tocify = new Tocify()
+// let tocify = new Tocify()
 export default {
   name: "seeArticle",
   data() {
