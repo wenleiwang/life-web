@@ -3,14 +3,19 @@
     <vheader></vheader>
     <el-row type="flex" justify="center" class="el-row-body">
       <el-col :span="16">
-        <div class="content_pic">这里是pic</div>
-        <!-- <template>
-        <el-carousel indicator-position="outside">
-          <el-carousel-item v-for="item in 4" :key="item">
-            <h3>{{ item }}</h3>
-          </el-carousel-item>
-        </el-carousel>
-      </template> -->
+        <!-- <div class="content_pic">这里是pic</div> -->
+        <template>
+          <el-carousel indicator-position="outside">
+            <el-carousel-item v-for="item in imagesbox" :key="item.id">
+              <!-- <img :src="item.idView" class="image"> -->
+              <el-image
+                style="width: 100%;"
+                :src="item.idView"
+                fit="contain"
+                :preview-src-list="imagesList"></el-image>
+            </el-carousel-item>
+          </el-carousel>
+      </template>
         <el-row type="flex" :gutter="15" justify="center">
           <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
             <el-row :gutter="20">
@@ -100,7 +105,15 @@ export default {
       pageSize:10,
       currentPage: 1,
       search:'',
-      classifyId:0
+      classifyId:0,
+      imagesbox:[
+        {id:0,idView:require("../../assets/back_001.jpg")},
+        {id:1,idView:require("../../assets/header001.jpg")},
+        {id:2,idView:require("../../assets/001.jpg")}
+      ],
+      imagesList:[
+        require("../../assets/001.jpg")
+      ]
     }
   },
   computed:{
