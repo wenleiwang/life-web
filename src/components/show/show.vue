@@ -3,23 +3,26 @@
     <vheader></vheader>
     <el-row type="flex" justify="center" class="el-row-body">
       <el-col :span="16">
-        <!-- <div class="content_pic">这里是pic</div> -->
-        <template>
-          <el-carousel indicator-position="outside">
-            <el-carousel-item v-for="item in imagesbox" :key="item.id">
-              <!-- <img :src="item.idView" class="image"> -->
-              <el-image
-                style="width: 100%;"
-                :src="item.idView"
-                fit="contain"
-                :preview-src-list="imagesList"></el-image>
-            </el-carousel-item>
-          </el-carousel>
-      </template>
+        <el-row type="file" justify="center">
+          <el-col :xs="0" :sm="24" :md="24" :lg="24" :xl="24">
+            <template>
+              <el-carousel indicator-position="outside" height="500px">
+                <el-carousel-item v-for="item in imagesbox" :key="item.id">
+                  <el-image
+                    style="width: 100%;"
+                    :src="item.idView"
+                    fit="contain"></el-image>
+                </el-carousel-item>
+              </el-carousel>
+            </template>
+          </el-col>
+        </el-row>
+        
         <el-row type="flex" :gutter="15" justify="center">
           <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
             <el-row :gutter="20">
               <el-col  :xs="24" :sm="18" :md="18" :lg="18" :xl="18">
+                <!-- 文章列表 -->
                 <artcleList @handle-size-change="handleSizeChange" @handle-current-change="handleCurrentChange" :pageSize = "pageSize" :currentPage = "currentPage"/>
               </el-col>
               <el-col :xs="0" :sm="6" :md="6" :lg="6" :xl="6">
@@ -50,39 +53,7 @@
           </el-col>
         </el-row>
       </el-col>
-    </el-row>
-    <div class="content_body">
-      
-      
-      <!-- <div class="content_list">
-        <artcleList @handle-size-change="handleSizeChange" @handle-current-change="handleCurrentChange" :pageSize = "pageSize" :currentPage = "currentPage"/>
-      </div>
-      <div class="indexLeft">
-        <div id="classify" class="article_list">
-          <div>
-            <h3>分类</h3>
-            <a class="more" href="#" @click="toClassify">More</a>
-          </div>
-          <li @click="get()">全部</li>
-          <li v-for="item in listClassify" :key="item.classifyId" @click="getClassifyAritcle(item.classifyId)">{{ item.classifyName }}</li>
-        </div>
-        <div id="host_article" class="article_list">
-          <div>
-            <h3>热门文章</h3>
-          </div>
-          <li><span class="group_num1">1</span><h3>适合做logo的字体有哪些?</h3></li>
-          <li><span class="group_num2">2</span><h3>朋友的“局”</h3></li>
-          <li><span class="group_num3">3</span><h3>农村的另类奇怪现象</h3></li>
-          <li><span class="group_num4">4</span><h3>谈谈“B端C端化”</h3></li>
-          <li><span class="group_num5">5</span><h3>做好自己</h3></li>
-          <li><span class="group_num6">6</span><h3>且以优雅过一生</h3></li>
-          <li><span class="group_num7">7</span><h3>请记住杨绛先生的这4句话（深度文字）</h3></li>
-          <li><span class="group_num8">8</span><h3>村上春树的那些扎心语录！请细细品味！</h3></li>
-          <li><span class="group_num9">9</span><h3>呼兰河 ，萧红一生回不去的故乡</h3></li>
-        </div>
-      </div> -->
-    </div>
-    
+    </el-row>   
     <vfooter></vfooter>
   </div>
 

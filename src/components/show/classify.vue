@@ -1,15 +1,10 @@
 <template>
   <div id="show">
-    <el-container>
-      <el-header  height="70px">
-        <vheader></vheader>
-      </el-header>
-      <el-container class="body-container">
-        <el-aside width="230px" style="padding: 0; background-color:#ffffff">
-          <ul>
-            <!-- <li v-for="item in listClassify" :key="item.classifyId">
-              <h3><a href="javascript:;" @click="get(item.classifyId)" :class="{onClassify: classifyId == item.classifyId}">{{ item.classifyName }}</a></h3>
-            </li> -->
+    <vheader></vheader>
+    <el-row type="flex" justify="center" class="activeDate">
+      <el-col :span="16">
+        <el-row>
+          <el-col :span="4">
             <el-collapse v-model="activeName" accordion>
               <el-collapse-item title="书名" name="1">
                 <el-collapse v-model="activeName" accordion >
@@ -76,15 +71,13 @@
                 </el-collapse>
               </el-collapse-item>
             </el-collapse>
-          </ul>
-        </el-aside>
-        <el-main>
-          <artcle :initial-value="initialCalue"/>
-          <!-- <artcleList  v-if="this.$store.state.listAritcle.length  > 0" @handle-size-change="handleSizeChange" @handle-current-change="handleCurrentChange" :pageSize = "pageSize" :currentPage = "currentPage"/>
-          <nodata v-else/> -->
-        </el-main>
-      </el-container>
-    </el-container>
+          </el-col>
+          <el-col :span="20">
+            <artcle/>
+          </el-col>
+        </el-row>
+      </el-col>
+    </el-row>
   </div>
 
 
@@ -102,14 +95,13 @@ export default {
   name: 'show',
   data(){
     return {
-      initialCalue,
+      activeName: '1',
       pageSize:20,
       currentPage: 1,
       classifyId:0,
       search:'',
       listClassify:[
         {'classifyId':1,'classifyName':'测试'}
-
       ],
       tree:[{
           label: '一级 1',
@@ -214,6 +206,9 @@ export default {
           }
         });
         
+    },
+    handleNodeClick(data) {
+      console.log(data);
     }
   }
 }
@@ -241,51 +236,8 @@ body{
 #show{
   height: 100%;
 }
-
-.body-container{
-  width: 70%;
-  margin: 72px auto 10px auto;
-
-}
-.el-aside {
-  color: #333;
-  text-align: center;
-  line-height: 40px;
-  height: 100%;
-  /* border-right: 1px solid #747d8c; */
-}
-
-.el-aside > ul::-webkit-scrollbar {
-  /*滚动条整体样式*/
-  width : 6px;  /*高宽分别对应横竖滚动条的尺寸*/
-  height: 1px;
-  }
-.el-aside > ul::-webkit-scrollbar-thumb {
-  /*滚动条里面小方块*/
-  border-radius: 10px;
-  box-shadow   : inset 0 0 5px #747d8c;
-  background   : #535353;
-  }
-.el-aside > ul::-webkit-scrollbar-track {
-  /*滚动条里面轨道*/
-  box-shadow   : inset 0 0 5px rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-  background   : #ededed;
-  }
-
-.el-aside > ul{
-  position: fixed;
-  overflow-y: auto;
-  padding: 0;
-  margin: 0;
-  width: 230px;
-  /* background-color: #D3DCE6; */
-  height: 100%;
-}
-.el-aside > ul > li{
-  width: 100%;
-  list-style: none;
-  flex-shrink: 0;
+.activeDate{
+  margin: 10px auto;
 }
 .onClassify{
   color: #2ed573;
@@ -294,41 +246,24 @@ body{
   color: #ff6348;
 }
 
-.el-main {
-  /* background-color: #E9EEF3; */
-  color: #333;
-  padding: 0;
-  padding-top: 10px;
-  /* height: 100%; */
-  overflow:inherit;
-}
-
-.el-header {
-  padding: 0;
-  position: fixed;
-  width: 100%;
-  z-index: 99;
-}
-
-ul > .el-collapse > .el-collapse-item > div > .el-collapse-item__header
+.el-collapse > .el-collapse-item > div > .el-collapse-item__header
 {
   padding-left: 5px;
-  border-right: 1px solid #747d8c;
   border-radius: 2px;
 }
-ul > .el-collapse > .el-collapse-item > div >.is-active{
+.el-collapse > .el-collapse-item > div >.is-active{
   border-left: 2px solid #ff6348;
 }
-ul > .el-collapse > .el-collapse-item > .el-collapse-item__wrap > .el-collapse-item__content {
+.el-collapse > .el-collapse-item > .el-collapse-item__wrap > .el-collapse-item__content {
   padding-bottom: 0;
   border-bottom: 0px;
 }
-ul > .el-collapse > .el-collapse-item > .el-collapse-item__wrap > .el-collapse-item__content > .el-collapse > .el-collapse-item > div > .el-collapse-item__header{
+.el-collapse > .el-collapse-item > .el-collapse-item__wrap > .el-collapse-item__content > .el-collapse > .el-collapse-item > div > .el-collapse-item__header{
   padding-left: 20px;
   border-radius: 2px;
   height: 30px;
 }
-ul > .el-collapse > .el-collapse-item > .el-collapse-item__wrap > .el-collapse-item__content > .el-collapse > .el-collapse-item > div > .is-active{
+.el-collapse > .el-collapse-item > .el-collapse-item__wrap > .el-collapse-item__content > .el-collapse > .el-collapse-item > div > .is-active{
   border-left: 2px solid #ffa502;
   color: #ffa502;
   height: 30px;

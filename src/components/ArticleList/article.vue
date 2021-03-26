@@ -1,12 +1,12 @@
 <template>
     <div id="seeArticle">
         <div class="inner">
-            <el-row :gutter="30" style="color: ">
-            <el-col :span="16">
+            <el-row :gutter="30" type="flex" justify="center">
+              <el-col :xs="26" :sm="18" :md="18" :lg="18" :xl="18">
                 <div class="markedArticle" v-html="markedDownContent" ref="helpDocs" @scroll="docsScroll"></div>
-            </el-col>
+              </el-col>
 
-            <el-col :span="6">
+              <el-col :xs="0" :sm="6" :md="6" :lg="6" :xl="6">
                 <div class="toc">
                 <div class="wrapper">
                     <div class="container">
@@ -28,9 +28,7 @@
                 </div>
                 </div>
             </el-col>
-
-            </el-row>
-
+          </el-row>
         </div>
     </div>  
 </template>
