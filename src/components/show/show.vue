@@ -1,10 +1,55 @@
 <template>
   <div id="show">
     <vheader></vheader>
+    <el-row type="flex" justify="center" class="el-row-body">
+      <el-col :span="16">
+        <div class="content_pic">这里是pic</div>
+        <!-- <template>
+        <el-carousel indicator-position="outside">
+          <el-carousel-item v-for="item in 4" :key="item">
+            <h3>{{ item }}</h3>
+          </el-carousel-item>
+        </el-carousel>
+      </template> -->
+        <el-row type="flex" :gutter="15" justify="center">
+          <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+            <el-row :gutter="20">
+              <el-col  :xs="24" :sm="18" :md="18" :lg="18" :xl="18">
+                <artcleList @handle-size-change="handleSizeChange" @handle-current-change="handleCurrentChange" :pageSize = "pageSize" :currentPage = "currentPage"/>
+              </el-col>
+              <el-col :xs="0" :sm="6" :md="6" :lg="6" :xl="6">
+                  <div id="classify" class="article_list">
+                    <div>
+                      <h3>分类</h3>
+                      <a class="more" href="#" @click="toClassify">More</a>
+                    </div>
+                    <li @click="get()">全部</li>
+                    <li v-for="item in listClassify" :key="item.classifyId" @click="getClassifyAritcle(item.classifyId)">{{ item.classifyName }}</li>
+                  </div>
+                  <div id="host_article" class="article_list">
+                    <div>
+                      <h3>热门文章</h3>
+                    </div>
+                    <li><span class="group_num1">1</span><h3>适合做logo的字体有哪些?</h3></li>
+                    <li><span class="group_num2">2</span><h3>朋友的“局”</h3></li>
+                    <li><span class="group_num3">3</span><h3>农村的另类奇怪现象</h3></li>
+                    <li><span class="group_num4">4</span><h3>谈谈“B端C端化”</h3></li>
+                    <li><span class="group_num5">5</span><h3>做好自己</h3></li>
+                    <li><span class="group_num6">6</span><h3>且以优雅过一生</h3></li>
+                    <li><span class="group_num7">7</span><h3>请记住杨绛先生的这4句话（深度文字）</h3></li>
+                    <li><span class="group_num8">8</span><h3>村上春树的那些扎心语录！请细细品味！</h3></li>
+                    <li><span class="group_num9">9</span><h3>呼兰河 ，萧红一生回不去的故乡</h3></li>
+                  </div>
+              </el-col>
+            </el-row>
+          </el-col>
+        </el-row>
+      </el-col>
+    </el-row>
     <div class="content_body">
-      <div class="content_pic">这里是pic</div>
       
-      <div class="content_list">
+      
+      <!-- <div class="content_list">
         <artcleList @handle-size-change="handleSizeChange" @handle-current-change="handleCurrentChange" :pageSize = "pageSize" :currentPage = "currentPage"/>
       </div>
       <div class="indexLeft">
@@ -15,11 +60,6 @@
           </div>
           <li @click="get()">全部</li>
           <li v-for="item in listClassify" :key="item.classifyId" @click="getClassifyAritcle(item.classifyId)">{{ item.classifyName }}</li>
-          <!-- <li>前后端分离之后端</li>
-          <li>我再也没有对你生气</li>
-          <li>数据库</li>
-          <li>感性生活</li>
-          <li>财富自由</li> -->
         </div>
         <div id="host_article" class="article_list">
           <div>
@@ -35,8 +75,9 @@
           <li><span class="group_num8">8</span><h3>村上春树的那些扎心语录！请细细品味！</h3></li>
           <li><span class="group_num9">9</span><h3>呼兰河 ，萧红一生回不去的故乡</h3></li>
         </div>
-      </div>
+      </div> -->
     </div>
+    
     <vfooter></vfooter>
   </div>
 
@@ -140,7 +181,9 @@ body{
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   padding: 0px;
 }
-
+.el-row-body{
+  margin: 10px auto;
+}
 .content_body{
   margin: 5px auto;
   width: 900px;
@@ -152,7 +195,7 @@ body{
   width: 100%;
   _height: 500px;
   min-height: 500px;
-  background-image: url(../../assets/002.jpg);
+  background-image: url(../../assets/back_001.jpg);
   background-size: 100% 100%;
   border-radius: 10px ;
 }
@@ -195,7 +238,6 @@ body{
 .more {
   float: right;
   text-decoration-line: none;
-  display: block;
   position: relative;
   margin: 10px;
   right: 10px;

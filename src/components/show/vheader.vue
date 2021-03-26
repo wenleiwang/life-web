@@ -1,23 +1,57 @@
 <template>
-    <div class="black_colore">
-        <div class="harder_body">
-            <h3 class="harder_logo" @click="toIndex">Wenwen</h3>
+    <div class="black_colore" >
+      <el-row justify="center" type="flex">
+        <el-col :span="16">
+          <el-row :gutter="20">
+            <el-col  :xs="0" :sm="2" :md="2" :lg="3" :xl="3" @click="toIndex">
+                <div class="harder_logo" >
+                  <img src="../../assets/water_logo.png" alt="" style="height:4rem;margin: 0 auto;">
+                </div>
+              </el-col>
+            <el-col :xs="16" :sm="16" :md="{span:16}" :lg="16" :xl="16">
+              <el-row :gutter="20">
+                <el-col :span="18">
+                  <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+                    <el-menu-item index="1" @click="toIndex">首页</el-menu-item>
+                    <el-submenu index="2">
+                      <template slot="title">我的工作台</template>
+                      <el-menu-item index="2-1">杂谈</el-menu-item>
+                      <el-menu-item index="2-2">高等数学</el-menu-item>
+                      <el-menu-item index="2-3">历史</el-menu-item>
+                      <el-submenu index="2-4">
+                        <template slot="title">选项4</template>
+                        <el-menu-item index="2-4-1">选项1</el-menu-item>
+                        <el-menu-item index="2-4-2">选项2</el-menu-item>
+                        <el-menu-item index="2-4-3">选项3</el-menu-item>
+                      </el-submenu>
+                    </el-submenu>
+                    <el-menu-item index="3" disabled>消息中心</el-menu-item>
+                    <el-menu-item index="4">关于我</el-menu-item>
+                  </el-menu>
+                </el-col>
+                <el-col :span="6" @click="toIndex"></el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+        </el-col>
+      </el-row>
+      <!-- <div class="harder_body">
+          <h3 class="harder_logo" @click="toIndex">Wenwen</h3>
 
-            <ul>
-                <li @click="toIndex">首页</li>
-                <li @click="toClassify">分类</li>
-                <li @click="toPigeonhole">归档</li>
-                <li @click="toShowMe">关于我</li>
-            </ul>
+          <ul>
+              <li @click="toIndex">首页</li>
+              <li @click="toClassify">分类</li>
+              <li @click="toPigeonhole">归档</li>
+              <li @click="toShowMe">关于我</li>
+          </ul>
 
-            <div class="harder_search">
-              <!-- form发起请求但不跳转 -->
-              <form @submit.prevent="submit">
-                <li><input type="text"  v-model="search"></li>
-                <li><img src="@/assets/search.png" alt="" @click="submit"></li>
-              </form>
-            </div>
-        </div>
+          <div class="harder_search">
+            <form @submit.prevent="submit">
+              <li><input type="text"  v-model="search"></li>
+              <li><img src="@/assets/search.png" alt="" @click="submit"></li>
+            </form>
+          </div>
+      </div> -->
     </div>
 </template>
 
@@ -28,6 +62,7 @@ export default {
         return {
             count : 0,
             search:'',
+            activeIndex: '1',
         }
     },
     methods:{
@@ -50,22 +85,50 @@ export default {
           query: {search:this.search}
         });
         window.open(routeUrl.href, '_blank');
+      },
+      handleSelect(key, keyPath) {
+        console.log(key, keyPath);
       }
     }
 }
 </script>
 
 <style scoped>
-body{
-  margin: 0px;
-  padding: 0px;
-  font-family: Microsoft YaHei;
-}
+
 .black_colore{
-  background: #2c3e50;
+  /* background: #2c3e50; */
+  background-color: #ffffff;
+  border-bottom: 1px solid #dfe4ea;
   width: 100%;
-  height: 70px;
+  height: 4rem;
 }
+
+.el-row {    
+  height: 100%;
+}
+.el-col {
+  border-radius: 4px;
+}
+.el-menu{
+  height: 4rem;
+}
+  .bg-purple-dark {
+    background: #99a9bf;
+  }
+  .bg-purple {
+    background: #d3dce6;
+  }
+  .bg-purple-light {
+    background: #e5e9f2;
+  }
+  .grid-content {
+    border-radius: 4px;
+    min-height: 36px;
+  }
+  .row-bg {
+    padding: 10px 0;
+    background-color: #f9fafc;
+  }
 
 .harder_body{
   margin: 0px auto -357px;
@@ -74,14 +137,16 @@ body{
   min-height: 100%;
 }
 .harder_logo{
-  color: #2ED573;
+  color: #70a1ff;
   font-family: Cambria Math;
   font-size: 32px;
   line-height: 35px;
-  margin: 20px auto;
+  height: 4rem;
+  width: 100%;
   font-weight: bold;
   float: left;
   text-shadow: 2px 2px 1px #000000;
+  background-size:contain;
 }
 
 .harder_body > ul{
