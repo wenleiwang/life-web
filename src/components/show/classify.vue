@@ -8,7 +8,7 @@
             <el-collapse v-model="activeClassify"  accordion>
               <el-collapse-item :title="item.classifyName" :name="item.classifyId+''" v-for="item in this.$store.state.listAritcleInClassify" :key="`classify-` + item.classifyId">
                 <el-collapse accordion >
-                  <h3 @click="seeArtcle(citem.articleId)" :class="{'is-active-h3' : showH3 === citem.articleId+''}" v-for="citem in item.listArticle" :key="`article-` + citem.articleId">{{ citem.articleName }}</h3>
+                  <h3 @click="seeArtcle(citem.articleId,item.classifyId)" :class="{'is-active-h3' : showH3 === citem.articleId+''}" v-for="citem in item.listArticle" :key="`article-` + citem.articleId">{{ citem.articleName }}</h3>
                   <h4 v-if="item.listArticle.length === 0">无数据</h4>
                 </el-collapse>
               </el-collapse-item>
@@ -93,10 +93,10 @@ export default {
     handleNodeClick(data) {
       console.log(data);
     },
-    seeArtcle(val){
-      this.showH3 = val;
-      let id = val
-      this.$router.push({name : 'classify' , query:{id}});
+    seeArtcle(val,classify){
+      let id = val +''
+      let classifyId = classify+''
+      this.$router.push({name : 'classify' , query:{id,classifyId}});
     }
   }
 }
