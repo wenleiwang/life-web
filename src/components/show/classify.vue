@@ -87,8 +87,8 @@ export default {
       this.get()
     },
     async userListClassify(){
-      this.showH3 = this.$route.query.id;
-      this.activeClassify = this.$route.query.classifyId
+      this.showH3 = this.$route.query.id + '';
+      this.activeClassify = this.$route.query.classifyId + ''
     },
     handleNodeClick(data) {
       console.log(data);

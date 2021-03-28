@@ -98,8 +98,12 @@ export default {
       return this.$store.state.listAritcleInClassify[0].classifyId
     },
     getOneArticleInClassify(){
-      let list = this.$store.state.listAritcleInClassify[0].listArticle
-      return list[0].articleId
+      let obj = this.$store.state.listAritcleInClassify[0]
+      let list = obj.listArticle
+      let articInfo = list[0]
+      this.$store.dispatch('headerIndex','2-'+articInfo.index);
+      console.log('2-'+articInfo.index)
+      return articInfo.articleId
     }
   },
   created (){
