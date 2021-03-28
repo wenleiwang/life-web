@@ -57,7 +57,7 @@
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
               :current-page.sync="currentPage"
-              :page-sizes="[2, 5, 40, 80]"
+              :page-sizes="[10, 20, 40, 80]"
               :page-size="pageSize"
               layout="total, sizes, prev, pager, next, jumper"
               :total="articleTotalComputed">

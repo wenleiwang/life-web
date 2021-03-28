@@ -17,12 +17,12 @@
                       <template slot="title">我的工作台</template>
                       <el-submenu v-for="item in this.$store.state.listAritcleInClassify" :key="`classify-` + item.classifyId" :index="`2-`+item.classifyId+``">
                         <template slot="title">{{ item.classifyName }}</template>
-                        <el-menu-item v-for="citem in item.listArticle" :key="`article-` + citem.articleId" :index="`2-`+citem.inedx">{{ citem.articleName }}</el-menu-item>
+                        <el-menu-item v-for="citem in item.listArticle" :key="`article-` + citem.articleId" :index="`2-`+citem.index">{{ citem.articleName }}</el-menu-item>
                         <el-menu-item v-if="item.listArticle.length === 0" index="2-0-0" disabled>无数据</el-menu-item>
                       </el-submenu>
                     </el-submenu>
                     <el-menu-item index="3" @click="toPigeonhole">点滴</el-menu-item>
-                    <el-menu-item index="4" @click="toShowMe">关于我</el-menu-item>
+                    <el-menu-item index="4" @click="toShowMe" disabled>关于我</el-menu-item>
                   </el-menu>
                 </el-col>
                 <el-col :span="1" @click="toIndex"></el-col>
@@ -73,7 +73,11 @@ export default {
       window.open(routeUrl.href, '_blank');
     },
     handleSelect(key, keyPath) {
-      console.log(key, keyPath);
+      if(key.indexOf('2-') != -1){
+        let id = key.split('-')[2]
+        let classifyId = key.split('-')[1]
+        this.$router.push({name : 'classify' , query:{id,classifyId}});
+      }
     }
   },
   beforeMount(){

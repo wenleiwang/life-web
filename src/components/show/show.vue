@@ -29,10 +29,10 @@
                   <div id="classify" class="article_list">
                     <div>
                       <h3>分类</h3>
-                      <a class="more" href="#" @click="toClassify">More</a>
+                      <a class="more" href="#" @click="toClassify(getClassifyOne,getOneArticleInClassify)">More</a>
                     </div>
                     <li @click="get()">全部</li>
-                    <li v-for="item in listClassify" :key="item.classifyId" @click="getClassifyAritcle(item.classifyId)">{{ item.classifyName }}</li>
+                    <li v-for="item in this.$store.state.listAritcleInClassify" :key="item.classifyId" @click="getClassifyAritcle(item.classifyId)">{{ item.classifyName }}</li>
                   </div>
                   <div id="host_article" class="article_list">
                     <div>
@@ -94,7 +94,13 @@ export default {
     listArticleAddToStore(){
       this.get()
     },
-    
+    getClassifyOne(){
+      return this.$store.state.listAritcleInClassify[0].classifyId
+    },
+    getOneArticleInClassify(){
+      let list = this.$store.state.listAritcleInClassify[0].listArticle
+      return list[0].articleId
+    }
   },
   created (){
     // 组件创建完后获取数据，
@@ -147,8 +153,10 @@ export default {
       this.currentPage = val;
       this.get()
     },
-    toClassify(){
-      this.$router.push({ name: 'classify' })
+    toClassify(classify,articleId){
+      let id = articleId
+      let classifyId = classify
+      this.$router.push({name : 'classify' , query:{id,classifyId}});
     }
   
   }

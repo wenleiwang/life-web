@@ -5,25 +5,18 @@
       <el-col :span="16">
         <el-row>
           <el-col :span="4">
-            <el-collapse  accordion>
-              <el-collapse-item title="书名1" name="1">
-                <el-collapse v-model="activeName" accordion >
-                  <h3 @click="seeArtcle(1)" :class="{'is-active-h3' : showH3 === 1}">第一章</h3>
-                  <h3 @click="seeArtcle(2)" :class="{'is-active-h3' : showH3 === 2}">第二章</h3>
-                </el-collapse>
-              </el-collapse-item>
-
-              <el-collapse-item title="书名2" name="1">
-                <el-collapse v-model="activeName" accordion >
-                  <h3 @click="seeArtcle(1)" :class="{'is-active-h3' : showH3 === 1}">第一章</h3>
-                  <h3 @click="seeArtcle(2)" :class="{'is-active-h3' : showH3 === 2}">第二章</h3>
+            <el-collapse v-model="activeClassify"  accordion>
+              <el-collapse-item :title="item.classifyName" :name="item.classifyId+''" v-for="item in this.$store.state.listAritcleInClassify" :key="`classify-` + item.classifyId">
+                <el-collapse accordion >
+                  <h3 @click="seeArtcle(citem.articleId)" :class="{'is-active-h3' : showH3 === citem.articleId+''}" v-for="citem in item.listArticle" :key="`article-` + citem.articleId">{{ citem.articleName }}</h3>
+                  <h4 v-if="item.listArticle.length === 0">无数据</h4>
                 </el-collapse>
               </el-collapse-item>
 
             </el-collapse>
           </el-col>
           <el-col :span="20">
-            <artcle/>
+            <artcle :classifyIdPorp="showH3+``"/>
           </el-col>
         </el-row>
       </el-col>
@@ -45,8 +38,8 @@ export default {
   name: 'show',
   data(){
     return {
-      activeName: '1',
-      showH3: 0,
+      activeClassify:'',
+      showH3: '',
       pageSize:20,
       currentPage: 1,
       classifyId:0,
@@ -54,52 +47,12 @@ export default {
       listClassify:[
         {'classifyId':1,'classifyName':'测试'}
       ],
-      tree:[{
-          label: '一级 1',
-          children: [{
-            label: '二级 1-1',
-            children: [{
-              label: '三级 1-1-1'
-            }]
-          }]
-        }, {
-          label: '一级 2',
-          children: [{
-            label: '二级 2-1',
-            children: [{
-              label: '三级 2-1-1'
-            }]
-          }, {
-            label: '二级 2-2',
-            children: [{
-              label: '三级 2-2-1'
-            }]
-          }]
-        }, {
-          label: '一级 3',
-          children: [{
-            label: '二级 3-1',
-            children: [{
-              label: '三级 3-1-1'
-            }]
-          }, {
-            label: '二级 3-2',
-            children: [{
-              label: '三级 3-2-1'
-            }]
-          }]
-        }],
-        defaultProps: {
-          children: 'children',
-          label: 'label'
-        }
     }
   },
   created (){
     // 组件创建完后获取数据，
     // 此时 data 已经被 observed 了
     this.userListClassify()
-    this.getArticle()
   },
   watch: {
     // 如果路由有变化，会再次执行该方法
@@ -134,36 +87,16 @@ export default {
       this.get()
     },
     async userListClassify(){
-      const result = await apiUserListClassify({});
-      if(result.Result === 1){
-        this.listClassify = result.Data
-      }else{
-        this.$message.error('请求失败！');
-      }
-    },
-    async getArticle() {
-      // 去后端获取数据
-      await this.axios
-        .get("/getArticle", {
-          params: {
-            articleId: 22,
-          },
-        })
-        .then((url) => {
-          if (url.data.Result == 1) {
-            this.initialCalue = url.data.Data.articleBody;
-          } else {
-            return null;
-          }
-        });
-        
+      this.showH3 = this.$route.query.id;
+      this.activeClassify = this.$route.query.classifyId
     },
     handleNodeClick(data) {
       console.log(data);
     },
     seeArtcle(val){
       this.showH3 = val;
-      console.log('点击查看文章详情')
+      let id = val
+      this.$router.push({name : 'classify' , query:{id}});
     }
   }
 }
@@ -235,6 +168,12 @@ body{
 }
 .el-collapse h3:hover{
   cursor: pointer;
+}
+.el-collapse h4{
+  width: 100%;
+  /* background: red; */
+  padding: 0px 0px 0px 20px;
+  color: #ced6e0;
 }
 
 .el-collapse > .is-active-h3{

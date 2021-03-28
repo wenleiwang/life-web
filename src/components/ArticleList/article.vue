@@ -8,30 +8,10 @@
 
             <el-col :xs="0" :sm="8" :md="6" :lg="6" :xl="6">
               <ul>
-                <li v-for="item in this.tocItemList" :key="item.anchor" :class="`toc-` + item.level">
+                <li v-for="item in tocItemListComputed" :key="item.anchor" :class="`toc-` + item.level">
                   <a :href="`#` + item.anchor" :class="{'active' : item.anchor === active}">{{ item.text }}</a>
                 </li>
               </ul>
-              <!-- <div class="toc">
-                <div class="wrapper">
-                  <div class="container">
-                    <div class="menu">
-                      <ul class="menu-list">
-                        <li v-for="(nav, index) in navList" :key="index" :class="{liColor: activeIndex === index}" @click="currentClick(index)">
-                          <a href="javascript:;" @click="pageJump(nav.index)">{{nav.title}}</a>
-                          <div v-if="nav.children.length > 0 && activeIndex === index" class="menu-children-list">
-                            <ul class="nav-list">
-                              <li v-for="(item, idx) in nav.children" :key="idx" :class="{liColor: childrenActiveIndex === idx}" @click.stop="childrenCurrentClick(idx)">
-                                <a href="javascript:;" :class="{textColor: childrenActiveIndex === idx}" @click="pageJump(item.index)">{{item.title}}</a>
-                              </li>
-                            </ul>
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>   
-                </div>
-              </div> -->
             </el-col>
           </el-row>
         </div>
@@ -55,6 +35,9 @@ let tocList = [];
 // let tocify = new Tocify()
 export default {
   name: "seeArticle",
+  props:{
+    classifyIdPorp:String
+  },
   data() {
     return {
         article: "",
@@ -90,6 +73,7 @@ export default {
         }
       })
         let index = 0;
+        tocList = []
         rendererMD.heading = function(text, level) {
           let tocItem = {
             anchor:'',
@@ -113,6 +97,9 @@ export default {
     content() {
       return this.article
     },
+    tocItemListComputed(){
+      return this.tocItemList
+    }
   },
 
   created() {
@@ -143,10 +130,11 @@ export default {
   methods: {
     async getArticle() {
       // 去后端获取数据
+      let id = this.$route.query.id
       await this.axios
         .get("/getArticle", {
           params: {
-            articleId: 20,
+            articleId: id,
           },
         })
         .then((url) => {
@@ -197,16 +185,19 @@ export default {
       });
     },
     addTocOffsetList(){
+      this.itemTab = []
       for (let i = 1; i <= this.tocItemList.length ; i++) {
         //循环获取的list中标题的位置
         let ele = document.getElementById('toc-' + i);
-        let item ={
-          offset:0,
-          classId:''
+        if(ele != null){
+          let item ={
+            offset:0,
+            classId:''
+          }
+          item.offset = ele.offsetTop
+          item.classId = 'toc-' + i;
+          this.itemTab.push(item);
         }
-        item.offset = ele.offsetTop
-        item.classId = 'toc-' + i;
-        this.itemTab.push(item);
         //获取位置后添加到itemTab数组
       }
     },
@@ -215,10 +206,6 @@ export default {
 </script>
 
 <style>
-.el-container{
-  /* height: 100%; */
-}
-
 .seeArticle {
     width: 100%;
     border-left: 1px solid red;
