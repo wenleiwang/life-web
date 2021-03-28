@@ -8,7 +8,8 @@ import {
     RECEIVE_REQ_ARITCLE,
     RECEIVE_CLASSIFY,
     RECEIVE_USER,
-    RECEIVE_ARITCLE_IN_CLASSIFY
+    RECEIVE_ARITCLE_IN_CLASSIFY,
+    RECEIVE_HEADER_INDEX
 } from './mutation-type'
 
 import {
@@ -49,6 +50,10 @@ export default {
         if(result.Result === 1){
             commit(RECEIVE_ARITCLE_IN_CLASSIFY,result.Data)
         }
+    },
+    // 修改Header中的激活标志
+    headerIndex({commit,state},index){
+        commit(RECEIVE_HEADER_INDEX,index);
     },
     // 登录用户
     login({commit,state},user){

@@ -8,5 +8,6 @@ export default {
     articleTotal:0,
     listAritcle:[],
     listClassify:[],
-    listAritcleInClassify:[]
+    listAritcleInClassify:[],
+    activeHeaderIndex:'1-'
 }

@@ -7,7 +7,8 @@ import {
     RECEIVE_CLASSIFY,
     RECEIVE_REQ_ARITCLE,
     RECEIVE_USER,
-    RECEIVE_ARITCLE_IN_CLASSIFY
+    RECEIVE_ARITCLE_IN_CLASSIFY,
+    RECEIVE_HEADER_INDEX
 } from './mutation-type'
 
 export default {
@@ -31,6 +32,9 @@ export default {
     },
     [RECEIVE_ARITCLE_IN_CLASSIFY](state, articleInClassify){
         state.listAritcleInClassify = articleInClassify;
+    },
+    [RECEIVE_HEADER_INDEX](state, activeHeaderIndex){
+        state.activeHeaderIndex = activeHeaderIndex;
     },
     addmu(state){
         state.name++

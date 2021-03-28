@@ -12,3 +12,5 @@ export const RECEIVE_USER = 'user'
 export const RECEIVE_TOTAL_COUNT = 'articleTotal'
 
 export const RECEIVE_ARITCLE_IN_CLASSIFY = 'listAritcleInClassify'
+
+export const RECEIVE_HEADER_INDEX ='activeHeaderIndex,'

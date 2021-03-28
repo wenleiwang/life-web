@@ -11,8 +11,8 @@
             <el-col :xs="24" :sm="17" :md="{span:16}" :lg="16" :xl="16">
               <el-row :gutter="20">
                 <el-col :span="23">
-                  <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-                    <el-menu-item index="1" @click="toIndex">首页</el-menu-item>
+                  <el-menu :default-active="this.$store.state.activeHeaderIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+                    <el-menu-item index="1-">首页</el-menu-item>
                     <el-submenu index="2">
                       <template slot="title">我的工作台</template>
                       <el-submenu v-for="item in this.$store.state.listAritcleInClassify" :key="`classify-` + item.classifyId" :index="`2-`+item.classifyId+``">
@@ -21,8 +21,8 @@
                         <el-menu-item v-if="item.listArticle.length === 0" index="2-0-0" disabled>无数据</el-menu-item>
                       </el-submenu>
                     </el-submenu>
-                    <el-menu-item index="3" @click="toPigeonhole">点滴</el-menu-item>
-                    <el-menu-item index="4" @click="toShowMe" disabled>关于我</el-menu-item>
+                    <el-menu-item index="3-" >点滴</el-menu-item>
+                    <el-menu-item index="4-" disabled>关于我</el-menu-item>
                   </el-menu>
                 </el-col>
                 <el-col :span="1" @click="toIndex"></el-col>
@@ -43,7 +43,7 @@ export default {
       return {
           count : 0,
           search:'',
-          activeIndex: '1',
+          activeHeaderIndex: '1-',
           classifyList:[]
       }
   },
@@ -55,29 +55,23 @@ export default {
     toIndex(){
       this.$router.push({ path: "/" })
     },
-    toClassify(){
-      this.$router.push({ name: 'classify' })
-    },
-    toPigeonhole(){
-      this.$router.push({ name: 'pigeonhole' })
-    },
-    toShowMe(){
-      this.$router.push({ name: 'showMe' })
-    },
-    submit(){
-      console.log('测试点击')
-      let routeUrl = this.$router.resolve({
-        path: "/search",
-        query: {search:this.search}
-      });
-      window.open(routeUrl.href, '_blank');
-    },
     handleSelect(key, keyPath) {
-      if(key.indexOf('2-') != -1){
+      this.$store.dispatch('headerIndex',key);
+      if(key.indexOf('1-') != -1){
+        console.log('进入首页'+key)
+        this.$router.push({ path: "/" })
+      }else if(key.indexOf('2-') != -1){
+        console.log('进入工作台'+key)
         let id = key.split('-')[2]
         let classifyId = key.split('-')[1]
         this.$router.push({name : 'classify' , query:{id,classifyId}});
+      }else if(key.indexOf('3-') != -1){
+        console.log('进入点滴'+key)
+        this.$router.push({ name: 'pigeonhole' })
+      }else if(key.indexOf('4-') != -1){
+        this.$router.push({ name: 'showMe' })
       }
+      
     }
   },
   beforeMount(){
