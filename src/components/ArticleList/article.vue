@@ -1,36 +1,41 @@
 <template>
     <div id="seeArticle">
-        <div class="inner">
-            <el-row :gutter="30" type="flex" justify="center">
-              <el-col :xs="26" :sm="18" :md="18" :lg="18" :xl="18">
-                <div class="markedArticle" v-html="markedDownContent" ref="helpDocs" @scroll="docsScroll"></div>
-              </el-col>
+      <div class="inner">
+          <el-row :gutter="30" type="flex" justify="center"  align="top">
+            <el-col :xs="24" :sm="16" :md="18" :lg="18" :xl="18">
+              <div id="markedDocument" class="markedArticle" v-html="markedDownContent" ref="helpDocs"></div>
+            </el-col>
 
-              <el-col :xs="0" :sm="6" :md="6" :lg="6" :xl="6">
-                <div class="toc">
+            <el-col :xs="0" :sm="8" :md="6" :lg="6" :xl="6">
+              <ul>
+                <li v-for="item in this.tocItemList" :key="item.anchor" :class="`toc-` + item.level">
+                  <a :href="`#` + item.anchor" :class="{'active' : item.anchor === active}">{{ item.text }}</a>
+                </li>
+              </ul>
+              <!-- <div class="toc">
                 <div class="wrapper">
-                    <div class="container">
+                  <div class="container">
                     <div class="menu">
-                        <ul class="menu-list">
+                      <ul class="menu-list">
                         <li v-for="(nav, index) in navList" :key="index" :class="{liColor: activeIndex === index}" @click="currentClick(index)">
-                            <a href="javascript:;" @click="pageJump(nav.index)">{{nav.title}}</a>
-                            <div v-if="nav.children.length > 0 && activeIndex === index" class="menu-children-list">
+                          <a href="javascript:;" @click="pageJump(nav.index)">{{nav.title}}</a>
+                          <div v-if="nav.children.length > 0 && activeIndex === index" class="menu-children-list">
                             <ul class="nav-list">
-                                <li v-for="(item, idx) in nav.children" :key="idx" :class="{liColor: childrenActiveIndex === idx}" @click.stop="childrenCurrentClick(idx)">
+                              <li v-for="(item, idx) in nav.children" :key="idx" :class="{liColor: childrenActiveIndex === idx}" @click.stop="childrenCurrentClick(idx)">
                                 <a href="javascript:;" :class="{textColor: childrenActiveIndex === idx}" @click="pageJump(item.index)">{{item.title}}</a>
-                                </li>
+                              </li>
                             </ul>
-                            </div>
+                          </div>
                         </li>
-                        </ul>
+                      </ul>
                     </div>
-                    </div>   
+                  </div>   
                 </div>
-                </div>
+              </div> -->
             </el-col>
           </el-row>
         </div>
-    </div>  
+      </div>  
 </template>
 
 <script>
@@ -42,11 +47,11 @@ import hljs from "highlight.js";
 import "highlight.js/styles/monokai-sublime.css";
 import vheader from '@/components/show/vheader'
 // import Tocify from './tocify.tsx'
-
+import { join } from 'lodash';
 import {listArticleFromClassifyId} from '../../api'
 
 let rendererMD = new marked.Renderer();
-let mdContent = ''
+let tocList = [];
 // let tocify = new Tocify()
 export default {
   name: "seeArticle",
@@ -54,18 +59,14 @@ export default {
     return {
         article: "",
         articleName:"",
-        articleContent:"",
         classifyId : 0,
         articleInfo:{},
         classifyArticleList:[],
-        navList: [],
-        activeIndex: 0,
-        docsFirstLevels: [],  // 文档第一级标题
-        docsSecondLevels: [], // 文档第二级标题
-        childrenActiveIndex: 0,
-        scrollDirection:true,
-        helpDocsScrollTop:0,
-        classifyList:[]
+        classifyList:[],
+        tocItemList:[],
+        itemTab:[],
+        active:'',
+        markedHtml:''
     };
   },
   components :{
@@ -90,20 +91,24 @@ export default {
       })
         let index = 0;
         rendererMD.heading = function(text, level) {
-          
-          if (level <= 2) {
-              return `<h${level} id="data-${index++}">${text}</h${level}>`;
-          } else {
-              return `<h${level}>${text}</h${level}>`;
+          let tocItem = {
+            anchor:'',
+            level:'',
+            text:''
           }
-          // const anchor = tocify.add(text, level);
-          // return `<a id="${anchor}" href="#${anchor}" class="anchor-fix"><h${level}>${text}</h${level}></a>\n`;
+          let anchor = `toc-${++index}`
+          tocItem.anchor = anchor
+          tocItem.level = level
+          tocItem.text = text
+          tocList.push(tocItem)
+          return `<a id="${anchor}" href="#${anchor}" class="anchor-fix"><h${level}>${text}</h${level}></a>\n`;
         };
             // https://my.oschina.net/u/4326108/blog/3675135
-        this.navList = this.handleNavTree();
-        this.getDocsFirstLevels(0);
       // return marked(this.content).replace(/<pre>/g, "<pre class='hljs'>");
-      return marked(this.content)
+      this.tocItemList = tocList;
+      var markedHteml = marked(this.content)
+
+      return markedHteml
     },
     content() {
       return this.article
@@ -116,8 +121,10 @@ export default {
     this.getArticle();
   },
   mounted(){
-    window.addEventListener('scroll',this.handleScroll,true);
-    window.addEventListener('scroll',this.docsScroll,true);
+    //当页面中所有元素加载完成触发
+    window.addEventListener("scroll", this.onscroll);
+    //为浏览器添加“scroll”滚动条滚动事件
+    document.getElementById('markedDocument').addEventListener("DOMSubtreeModified", this.addTocOffsetList);
   },
   watch: {
     // 如果路由有变化，会再次执行该方法
@@ -131,7 +138,7 @@ export default {
       this.$nextTick( () => {
         this.$refs.tree.setCurrentKey(this.$route.query.id)
       })
-    }
+    },
   },
   methods: {
     async getArticle() {
@@ -178,203 +185,31 @@ export default {
     goBack() {
       window.history.length > 1 ? this.$router.go(-1) : this.$router.push("/");
     },
-    childrenCurrentClick(index) {
-      this.childrenActiveIndex = index
-    },
-    getDocsFirstLevels(times) {
-      // 解决图片加载会影响高度问题
-      setTimeout(() => {
-          let firstLevels = [];
-          Array.from(document.querySelectorAll('h1'), element => {
-              firstLevels.push(element.offsetTop - 60)
-          })
-          this.docsFirstLevels = firstLevels;
-
-          if (times < 8) {
-              this.getDocsFirstLevels(times + 1);
-          }
-      }, 500);
-    },
-    getDocsSecondLevels(parentActiveIndex) {
-      let idx = parentActiveIndex;
-      let secondLevels = [];
-      let navChildren = this.navList[idx].children
-      if(navChildren.length > 0) {
-          secondLevels = navChildren.map((item)=>{
-            return this.$el.querySelector(`#data-${item.index}`).offsetTop - 60
-          })
-          this.docsSecondLevels = secondLevels;
-      }
-    },
-    docsScroll() {
-      if(this.$route.path === '/show/seeArticle'){
-        if (this.titleClickScroll) {
-            return;
+    //所有方法
+    onscroll(Event) {
+      //滚动事件
+      let ws = window.scrollY; //当前滚动条位置
+      this.itemTab.forEach((item, index) => {//循环检测每个标题的位置
+        if (ws>item.offset-50) {//判断当前滚动条大于
+          this.active = item.classId;//将最后一个大于item的下标赋值给active
+                              //active是当前滚动条对应的标题位置
         }
-        let scrollTop = window.pageYOffset || document.documentElement.scrollTop || 
-                  document.body.scrollTop
-        let firstLevelIndex = this.getLevelActiveIndex(scrollTop, this.docsFirstLevels)
-        this.currentClick(firstLevelIndex)
-
-        let secondLevelIndex = this.getLevelActiveIndex(scrollTop, this.docsSecondLevels)
-        this.childrenCurrentClick(secondLevelIndex)
-      }
-    },
-    getLevelActiveIndex(scrollTop, docsLevels) {
-      let currentIdx = null;
-      let nowActive = docsLevels.some((currentValue, index) => {
-          if(currentValue >= scrollTop) {
-              currentIdx = index
-              return true
-          }
-      })
-
-      currentIdx = currentIdx - 1
-      
-      if (nowActive && currentIdx === -1) {
-          currentIdx = 0
-      } else if (!nowActive && currentIdx === -1) {
-          currentIdx = docsLevels.length - 1
-      }
-      return currentIdx     
-    },
-    pageJump(id) {
-      this.titleClickScroll = true;
-      console.log(this.$el.querySelector(`#data-${id}`).offsetTop)
-      document.documentElement.scrollTop = this.$el.querySelector(`#data-${id}`).offsetTop - 20;
-      setTimeout(() => this.titleClickScroll = false, 100);
-    },
-    currentClick(index) {
-      this.activeIndex = index
-      this.getDocsSecondLevels(index)
-    },
-    getTitle(content) {
-      let nav = [];
-      let tempArr = [];
-      content.replace(/(#+)[^#][^\n]*?(?:\n)/g, function(match, m1, m2) {
-              let title = match.replace('\n', '');
-              let level = m1.length;
-              tempArr.push({
-                  title: title.replace(/^#+/, '').replace(/\([^)]*?\)/, ''),
-                  level: level,
-                  children: [],
-              });
-          });
-      // 只处理一级二级标题，以及添加与id对应的index值
-      nav = tempArr.filter(item => item.level <= 2);
-      let index = 0;
-      return nav = nav.map(item => {
-          item.index = index++;
-          return item;
       });
     },
-    // 将一级二级标题数据处理成树结构
-    handleNavTree() {
-      let navs = this.getTitle(this.article)
-      let navLevel = [1, 2];
-      let retNavs = [];
-      let toAppendNavList;
-      navLevel.forEach(level => {
-          // 遍历一级二级标题，将同一级的标题组成新数组
-          toAppendNavList = this.find(navs, {
-              level: level
-          });
-          
-          if (retNavs.length === 0) {
-              // 处理一级标题                    
-              retNavs = retNavs.concat(toAppendNavList);
-          } else {
-              // 处理二级标题，并将二级标题添加到对应的父级标题的children中    
-              toAppendNavList.forEach(item => {
-                  item = Object.assign(item);
-                  let parentNavIndex = this.getParentIndex(navs, item.index);
-                  return this.appendToParentNav(retNavs, parentNavIndex, item);
-              });
-          }
-      });
-      return retNavs;
-    },
-    find(arr, condition) {
-      return arr.filter(item => {
-          for (let key in condition) {
-              if (condition.hasOwnProperty(key) && condition[key] !== item[key]) {
-                  return false;
-              }
-          }
-          return true;
-      });
-    },
-    getParentIndex(nav, endIndex) {
-      for (var i = endIndex - 1; i >= 0; i--) {
-          if (nav[endIndex].level > nav[i].level) {
-              return nav[i].index;
-          }
-      }
-    },
-    appendToParentNav(nav, parentIndex, newNav) {
-      let index = this.findIndex(nav, {
-          index: parentIndex
-      });
-      nav[index].children = nav[index].children.concat(newNav);
-    },
-    findIndex(arr, condition) {
-      let ret = -1;
-      arr.forEach((item, index) => {
-          for (var key in condition) {
-              if (condition.hasOwnProperty(key) && condition[key] !== item[key]) { 
-                  return false;
-              }
-          }
-          ret = index;
-      });
-      return ret;
-    },
-    handleScroll(){
-      if(this.$route.path === '/show/seeArticle'){
-        // 页面滚动距顶部距离
-        var scrollTop = window.pageYOffset || document.documentElement.scrollTop || 
-                  document.body.scrollTop
-        if(scrollTop<70){
-          this.scrollDirection = true;
-        }else{
-          this.scrollDirection = false;
+    addTocOffsetList(){
+      for (let i = 1; i <= this.tocItemList.length ; i++) {
+        //循环获取的list中标题的位置
+        let ele = document.getElementById('toc-' + i);
+        let item ={
+          offset:0,
+          classId:''
         }
+        item.offset = ele.offsetTop
+        item.classId = 'toc-' + i;
+        this.itemTab.push(item);
+        //获取位置后添加到itemTab数组
       }
     },
-    
-    // ****************************** 拖拽
-    handleNodeClick(data) {
-      var id = data.id
-      this.$router.push({name : 'seeArticle' , query:{id}})
-    },
-    handleDragStart(node, ev) {
-        console.log('drag start', node);
-      },
-      handleDragEnter(draggingNode, dropNode, ev) {
-        console.log('tree drag enter: ', dropNode.label);
-      },
-      handleDragLeave(draggingNode, dropNode, ev) {
-        console.log('tree drag leave: ', dropNode.label);
-      },
-      handleDragOver(draggingNode, dropNode, ev) {
-        console.log('tree drag over: ', dropNode.label);
-      },
-      handleDragEnd(draggingNode, dropNode, dropType, ev) {
-        console.log('tree drag end: ', dropNode && dropNode.label, dropType);
-      },
-      handleDrop(draggingNode, dropNode, dropType, ev) {
-        console.log('tree drop: ', dropNode.label, dropType);
-      },
-      allowDrop(draggingNode, dropNode, type) {
-        if (dropNode.data.label === '二级 3-1') {
-          return type !== 'inner';
-        } else {
-          return true;
-        }
-      },
-      allowDrag(draggingNode) {
-        return draggingNode.data.label.indexOf('三级 3-2-2') === -1;
-      }
   }
 };
 </script>
@@ -409,7 +244,7 @@ export default {
   width: 100%;
   height: 200px;
   border-radius: 1em;
-  position: fixed;
+  /* position: fixed; */
 }
 a {
   text-decoration: none;
@@ -437,31 +272,23 @@ a:hover{
 
 blockquote {
   border-left: 3px solid green;
-  background-color: #ccc;
-  margin-left: 1em;
+  margin-left: 0em;
+  padding-left: 5px;
 }
 
 /* 代码块 */
 code {
-  margin: 0 5px;
-  padding: 2px 5px;
-  background-color: #ffe0e0;
-  color: #ff502c;
-  border-radius: 5px;
+  display: inline-block ;
+  background-color:#f3f3f3;
+  border:1px solid #fdb9cc;
+  border-radius:3px;
+  font-size: 12px;
+  padding: 5px;
+  color:#4f4f4f;
+  margin: 0px 3px;
+  font-family: Menlo,Monaco,Consolas,"Andale Mono","lucida console","Courier New",monospace;
+  
 }
-
-/* 代码块 */
-pre > code {
-    display: block;
-    padding: 10px;
-    margin: 10px 0;
-    background-color: #333;
-    border-radius: 5px;
-    overflow-y: auto;
-    color: #FFF;
-    font-family: Menlo, monospace;
-}
-
 .bread-div{
     padding: .5rem;
     border-bottom:1px solid #eee;
@@ -497,19 +324,6 @@ pre >code{
     color:#FFF;
 
 }
-code {
-    display: inline-block ;
-    background-color:#f3f3f3;
-    border:1px solid #fdb9cc;
-    border-radius:3px;
-    font-size: 12px;
-    padding-left: 5px;
-    padding-right: 5px;
-    color:#4f4f4f;
-    margin: 0px 3px;
-
-}
-
 .title-anchor{
     color:#888 !important;
     padding:4px !important;
@@ -549,6 +363,26 @@ iframe{
 }
 .ant-anchor-wrapper{
     padding: 5px !important;
+}
+/**end */ 
+
+.toc-1{
+  margin-left: 10px;
+}
+.toc-2{
+  margin-left: 20px;
+}
+.toc-3{
+  margin-left: 30px;
+}
+.toc-4{
+  margin-left: 40px;
+}
+.toc-5{
+  margin-left: 50px;
+}
+.toc-6{
+  margin-left: 60px;
 }
 
 </style>

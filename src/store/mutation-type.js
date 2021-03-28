@@ -10,3 +10,5 @@ export const RECEIVE_CLASSIFY = 'classifyList'
 export const RECEIVE_USER = 'user'
 
 export const RECEIVE_TOTAL_COUNT = 'articleTotal'
+
+export const RECEIVE_ARITCLE_IN_CLASSIFY = 'listAritcleInClassify'

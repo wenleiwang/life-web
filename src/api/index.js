@@ -2,8 +2,10 @@
  * 包含N个接口请求函数的模块
  */
 import ajax from './ajax'
+/******首页模块 */
 // 获取文章列表
 export const listArticle = (data) => ajax('/listArticle',data,'GET');
+export const listArticleInClassify = (data) => ajax('/listArticleInClassify',data,'GET');
 
 // 新增或修改文章
 export const updateArticle = (data) => ajax('/admin/updateArticle',data,'POST')

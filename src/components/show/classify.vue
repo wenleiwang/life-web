@@ -5,71 +5,21 @@
       <el-col :span="16">
         <el-row>
           <el-col :span="4">
-            <el-collapse v-model="activeName" accordion>
-              <el-collapse-item title="书名" name="1">
+            <el-collapse  accordion>
+              <el-collapse-item title="书名1" name="1">
                 <el-collapse v-model="activeName" accordion >
-                  <el-collapse-item title="第一章" name="1" >
-                    <div>
-                      <h3>与现实生活一致</h3>
-                      <el-tree :data="tree" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
-                    </div>
-                  </el-collapse-item>
-                  <el-collapse-item title="第二章" name="2">
-                    <div>
-                      <h3>在界面中一致</h3>
-                      <el-tree :data="tree" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
-                    </div>
-                  </el-collapse-item>
+                  <h3 @click="seeArtcle(1)" :class="{'is-active-h3' : showH3 === 1}">第一章</h3>
+                  <h3 @click="seeArtcle(2)" :class="{'is-active-h3' : showH3 === 2}">第二章</h3>
                 </el-collapse>
               </el-collapse-item>
-              <el-collapse-item title="反馈 Feedback" name="2">
-                <el-collapse v-model="activeName" accordion>
-                  <el-collapse-item title="与现实生活一致" name="1">
-                    <div>
-                      <h3>与现实生活一致</h3>
-                      <el-tree :data="tree" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
-                    </div>
-                  </el-collapse-item>
-                  <el-collapse-item title="与现实生活一致" name="2">
-                    <div>
-                      <h3>在界面中一致</h3>
-                      <el-tree :data="tree" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
-                    </div>
-                  </el-collapse-item>
+
+              <el-collapse-item title="书名2" name="1">
+                <el-collapse v-model="activeName" accordion >
+                  <h3 @click="seeArtcle(1)" :class="{'is-active-h3' : showH3 === 1}">第一章</h3>
+                  <h3 @click="seeArtcle(2)" :class="{'is-active-h3' : showH3 === 2}">第二章</h3>
                 </el-collapse>
               </el-collapse-item>
-              <el-collapse-item title="效率 Efficiency" name="3">
-                <el-collapse v-model="activeName" accordion>
-                  <el-collapse-item title="与现实生活一致" name="1">
-                    <div>
-                      <h3>与现实生活一致</h3>
-                      <el-tree :data="tree" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
-                    </div>
-                  </el-collapse-item>
-                  <el-collapse-item title="与现实生活一致" name="2">
-                    <div>
-                      <h3>在界面中一致</h3>
-                      <el-tree :data="tree" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
-                    </div>
-                  </el-collapse-item>
-                </el-collapse>
-              </el-collapse-item>
-              <el-collapse-item title="可控 Controllability" name="4">
-                <el-collapse v-model="activeName" accordion>
-                  <el-collapse-item title="与现实生活一致" name="1">
-                    <div>
-                      <h3>与现实生活一致</h3>
-                      <el-tree :data="tree" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
-                    </div>
-                  </el-collapse-item>
-                  <el-collapse-item title="与现实生活一致" name="2">
-                    <div>
-                      <h3>在界面中一致</h3>
-                      <el-tree :data="tree" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
-                    </div>
-                  </el-collapse-item>
-                </el-collapse>
-              </el-collapse-item>
+
             </el-collapse>
           </el-col>
           <el-col :span="20">
@@ -96,6 +46,7 @@ export default {
   data(){
     return {
       activeName: '1',
+      showH3: 0,
       pageSize:20,
       currentPage: 1,
       classifyId:0,
@@ -209,6 +160,10 @@ export default {
     },
     handleNodeClick(data) {
       console.log(data);
+    },
+    seeArtcle(val){
+      this.showH3 = val;
+      console.log('点击查看文章详情')
     }
   }
 }
@@ -271,5 +226,20 @@ body{
 
 .is-expanded{
   color: #2ed573;
+}
+
+.el-collapse h3{
+  width: 100%;
+  /* background: red; */
+  padding: 0px 0px 0px 20px;
+}
+.el-collapse h3:hover{
+  cursor: pointer;
+}
+
+.el-collapse > .is-active-h3{
+  border-left: 2px solid #ffa502;
+  color: #ffa502;
+  height: 30px;
 }
 </style>

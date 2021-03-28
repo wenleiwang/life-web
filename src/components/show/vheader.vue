@@ -8,88 +8,80 @@
                   <img src="../../assets/water_logo.png" alt="" style="height:4rem;margin: 0 auto;">
                 </div>
               </el-col>
-            <el-col :xs="16" :sm="16" :md="{span:16}" :lg="16" :xl="16">
+            <el-col :xs="24" :sm="17" :md="{span:16}" :lg="16" :xl="16">
               <el-row :gutter="20">
-                <el-col :span="18">
+                <el-col :span="23">
                   <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
                     <el-menu-item index="1" @click="toIndex">首页</el-menu-item>
                     <el-submenu index="2">
                       <template slot="title">我的工作台</template>
-                      <el-menu-item index="2-1">杂谈</el-menu-item>
-                      <el-menu-item index="2-2">高等数学</el-menu-item>
-                      <el-menu-item index="2-3">历史</el-menu-item>
-                      <el-submenu index="2-4">
-                        <template slot="title">选项4</template>
-                        <el-menu-item index="2-4-1">选项1</el-menu-item>
-                        <el-menu-item index="2-4-2">选项2</el-menu-item>
-                        <el-menu-item index="2-4-3">选项3</el-menu-item>
+                      <el-submenu v-for="item in this.$store.state.listAritcleInClassify" :key="`classify-` + item.classifyId" :index="`2-`+item.classifyId+``">
+                        <template slot="title">{{ item.classifyName }}</template>
+                        <el-menu-item v-for="citem in item.listArticle" :key="`article-` + citem.articleId" :index="`2-`+citem.inedx">{{ citem.articleName }}</el-menu-item>
+                        <el-menu-item v-if="item.listArticle.length === 0" index="2-0-0" disabled>无数据</el-menu-item>
                       </el-submenu>
                     </el-submenu>
-                    <el-menu-item index="3" disabled>消息中心</el-menu-item>
-                    <el-menu-item index="4">关于我</el-menu-item>
+                    <el-menu-item index="3" @click="toPigeonhole">点滴</el-menu-item>
+                    <el-menu-item index="4" @click="toShowMe">关于我</el-menu-item>
                   </el-menu>
                 </el-col>
-                <el-col :span="6" @click="toIndex"></el-col>
+                <el-col :span="1" @click="toIndex"></el-col>
               </el-row>
             </el-col>
           </el-row>
         </el-col>
       </el-row>
-      <!-- <div class="harder_body">
-          <h3 class="harder_logo" @click="toIndex">Wenwen</h3>
-
-          <ul>
-              <li @click="toIndex">首页</li>
-              <li @click="toClassify">分类</li>
-              <li @click="toPigeonhole">归档</li>
-              <li @click="toShowMe">关于我</li>
-          </ul>
-
-          <div class="harder_search">
-            <form @submit.prevent="submit">
-              <li><input type="text"  v-model="search"></li>
-              <li><img src="@/assets/search.png" alt="" @click="submit"></li>
-            </form>
-          </div>
-      </div> -->
     </div>
 </template>
 
 <script>
+import {listArticleInClassify} from '../../api'
 export default {
-    name: 'admin-header',
-    data: function(){
-        return {
-            count : 0,
-            search:'',
-            activeIndex: '1',
-        }
-    },
-    methods:{
-      toIndex(){
-        this.$router.push({ path: "/" })
-      },
-      toClassify(){
-        this.$router.push({ name: 'classify' })
-      },
-      toPigeonhole(){
-        this.$router.push({ name: 'pigeonhole' })
-      },
-      toShowMe(){
-        this.$router.push({ name: 'showMe' })
-      },
-      submit(){
-        console.log('测试点击')
-        let routeUrl = this.$router.resolve({
-          path: "/search",
-          query: {search:this.search}
-        });
-        window.open(routeUrl.href, '_blank');
-      },
-      handleSelect(key, keyPath) {
-        console.log(key, keyPath);
+  
+  name: 'admin-header',
+  data: function(){
+      return {
+          count : 0,
+          search:'',
+          activeIndex: '1',
+          classifyList:[]
       }
+  },
+  methods:{
+    // 获取分类的所有文章列表
+    getClassifyArticleList(){
+      this.$store.dispatch('listArticleInClassify');
+    },
+    toIndex(){
+      this.$router.push({ path: "/" })
+    },
+    toClassify(){
+      this.$router.push({ name: 'classify' })
+    },
+    toPigeonhole(){
+      this.$router.push({ name: 'pigeonhole' })
+    },
+    toShowMe(){
+      this.$router.push({ name: 'showMe' })
+    },
+    submit(){
+      console.log('测试点击')
+      let routeUrl = this.$router.resolve({
+        path: "/search",
+        query: {search:this.search}
+      });
+      window.open(routeUrl.href, '_blank');
+    },
+    handleSelect(key, keyPath) {
+      console.log(key, keyPath);
     }
+  },
+  beforeMount(){
+    this.getClassifyArticleList()
+  },
+  mounted(){
+    
+  }
 }
 </script>
 

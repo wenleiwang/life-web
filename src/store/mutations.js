@@ -6,7 +6,8 @@ import {
     RECEIVE_ARITCLE,
     RECEIVE_CLASSIFY,
     RECEIVE_REQ_ARITCLE,
-    RECEIVE_USER
+    RECEIVE_USER,
+    RECEIVE_ARITCLE_IN_CLASSIFY
 } from './mutation-type'
 
 export default {
@@ -27,6 +28,9 @@ export default {
     [RECEIVE_USER](state, user){
         state.user = user
         state.Authorization = user.authorization;
+    },
+    [RECEIVE_ARITCLE_IN_CLASSIFY](state, articleInClassify){
+        state.listAritcleInClassify = articleInClassify;
     },
     addmu(state){
         state.name++

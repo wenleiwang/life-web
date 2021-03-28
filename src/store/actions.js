@@ -7,11 +7,13 @@ import {
     RECEIVE_ARITCLE,
     RECEIVE_REQ_ARITCLE,
     RECEIVE_CLASSIFY,
-    RECEIVE_USER
+    RECEIVE_USER,
+    RECEIVE_ARITCLE_IN_CLASSIFY
 } from './mutation-type'
 
 import {
     listArticle,
+    listArticleInClassify,
     listClassify,
     login
 } from '../api'
@@ -32,7 +34,6 @@ export default {
     // 异步获取文章列表
     async listAritcle ({commit,state},data){
         // 发送异步ajax请求
-        
         const result = await listArticle(data)
         if(result.Result === 1){
             const listAritcle = result.Data
@@ -43,7 +44,12 @@ export default {
         }
         
     },
-
+    async listArticleInClassify({commit,state}){
+        const result = await listArticleInClassify();
+        if(result.Result === 1){
+            commit(RECEIVE_ARITCLE_IN_CLASSIFY,result.Data)
+        }
+    },
     // 登录用户
     login({commit,state},user){
         // 修改token，并将token存入localStorage

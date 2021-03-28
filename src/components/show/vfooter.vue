@@ -9,7 +9,7 @@
             </el-col>
             <el-col :xs="12" :sm="6" :md="6" :lg="6" :xl="6" class="footer-li">
               <h3>我的站外链接</h3>
-              <p>CSDN:<a href="https://blog.csdn.net/weixin_42119415">文文的博客</a></p>
+              <p>CSDN:<a href="https://blog.csdn.net/weixin_42119415" target="_blank">文文的博客</a></p>
             </el-col>
             <el-col :xs="0" :sm="6" :md="6" :lg="6" :xl="6" class="footer-li">
               <h3>联系我</h3>
