@@ -3,6 +3,8 @@
  */
 import ajax from './ajax'
 /******首页模块 */
+// 增加浏览量
+export const addView = (data) => ajax('/addView',data,'GET');
 // 获取文章列表
 export const listArticle = (data) => ajax('/listArticle',data,'GET');
 export const listArticleInClassify = (data) => ajax('/listArticleInClassify',data,'GET');

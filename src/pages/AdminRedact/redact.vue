@@ -184,18 +184,6 @@ export default {
                     type: 'error'
                 });
             }
-            // this.$axios({
-            //     url :'/admin/updateArticle',
-            //     method : 'post',
-            //     data: this.push
-            // }).then((url) => {
-            //     if(url.data.Result == 1){
-            //         alert(url.data.Message)
-            //         this.push.articleId = url.data.Data
-            //     }else{
-            //         alert(url.data.Message)
-            //     }
-            // })
         },
         seeArticle(){
             this.push.deleted=2

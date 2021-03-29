@@ -28,7 +28,7 @@ import "highlight.js/styles/monokai-sublime.css";
 import vheader from '@/components/show/vheader'
 // import Tocify from './tocify.tsx'
 import { join } from 'lodash';
-import {listArticleFromClassifyId} from '../../api'
+import {listArticleFromClassifyId,addView} from '../../api'
 
 let rendererMD = new marked.Renderer();
 let tocList = [];
@@ -147,6 +147,8 @@ export default {
             alert(url.data.Message);
           }
         });
+
+      await addView({'articledId':id})
         
     },
 

@@ -76,8 +76,9 @@
 </template>
 
 <script>
-
+import {upload,updateArticle} from '../../api'
 export default {
+    
     name: 'editor',
     data(){
         return {
@@ -115,29 +116,27 @@ export default {
         // or 'mavon-editor': mavonEditor
     },
     methods : {
-        imgAdd (pos, $file) {
+        async imgAdd (pos, $file) {
             let formdata = new FormData()
             formdata.append('file', $file)
-            this.$axios({
-               url: '/file/upload',
-               method: 'post',
-               data: formdata,
-               headers: { 'Content-Type': 'multipart/form-data;charset=UTF-8' ,
-                'aaa':'aaa'
-               },
-           }).then((url) => {
-               // 第二步.将返回的url替换到文本原位置![...](0) -> ![...](url)
-            //    this.$vm.$img2Url(pos, url.data);
-               this.$refs.md.$img2Url(pos, url.data);
-           })
+            const result = await upload(formdata)
+            if(result != null){
+                // 上传成功
+                console.log(result)
+                this.$refs.md.$img2Url(pos, result);
+            }else{
+                // 上传失败
+                this.$message({
+                    message: '上传失败',
+                    type: 'warning'
+                });
+            }
         },
         imgDel (pos) {
             delete this.imgFile[pos]
         },
-        updateArticle(){
+        async updateArticle(){
             this.push.deleted=0
-            document.cookie="user_info=1;path = /"
-
 
             this.push.tagIdList.forEach((item) => {
                 var tagName
@@ -169,22 +168,26 @@ export default {
                     this.push.tagIdList.push(id)
                 }
             }))
-            this.$axios({
-                url :'/admin/updateArticle',
-                method : 'post',
-                data: this.push
-            }).then((url) => {
-                if(url.data.Result == 1){
-                    alert(url.data.Message)
-                    this.push.articleId = url.data.Data
-                }else{
-                    alert(url.data.Message)
-                }
-            })
+            const result = await updateArticle(this.push);
+            if(result != null && result.Result === 1){
+                this.$message({
+                    message: '发布成功！',
+                    type: 'success'
+                });
+            }else if(result != null){
+                this.$message({
+                    message: '发布失败，原因：'+result.Message,
+                    type: 'warning'
+                });
+            }else{
+                this.$message({
+                    message: '发布失败!',
+                    type: 'error'
+                });
+            }
         },
         seeArticle(){
             this.push.deleted=2
-            document.cookie="user_info=1;path = /"
 
             this.push.tagIdList.forEach((item) => {
                 var tagName
