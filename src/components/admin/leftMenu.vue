@@ -67,4 +67,7 @@ color: #333;
   float: left;
   text-shadow: 2px 2px 1px #000000;
 }
+ul{
+  margin: 0;
+}
 </style>

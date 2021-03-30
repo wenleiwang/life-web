@@ -17,6 +17,6 @@ export default {
 #app{
   height: 100%;
   width: 100%;
-  border-top: solid 1px #f1f2f6;
+  /* border-top: solid 1px #f1f2f6; */
 }
 </style>

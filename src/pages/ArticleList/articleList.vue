@@ -1,5 +1,5 @@
 <template>
-    <el-row :gutter="20" >
+    <el-row>
         <el-row type="flex" justify="center">
             <el-col :span="20">
                 <el-table :data="tableData" border style="width: 100%">
