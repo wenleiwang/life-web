@@ -5,7 +5,7 @@
           <el-row :gutter="20">
             <el-col  :xs="0" :sm="2" :md="2" :lg="3" :xl="3" @click="toIndex">
                 <div class="harder_logo" >
-                  <img src="../../assets/water_logo.png" alt="" style="height:4rem;margin: 0 auto;">
+                  <img src="@/assets/water_logo.png" alt="" style="height:4rem;margin: 0 auto;">
                 </div>
               </el-col>
             <el-col :xs="24" :sm="17" :md="{span:16}" :lg="16" :xl="16">

@@ -266,6 +266,9 @@ blockquote {
 }
 
 /* 代码块 */
+.markedArticle .img{
+  width: 100%;
+}
 code {
   display: inline-block ;
   background-color:#f3f3f3;

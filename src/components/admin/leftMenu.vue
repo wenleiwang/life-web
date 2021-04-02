@@ -50,7 +50,7 @@ export default {
 .el-header {
 background-color: #B3C0D1;
 color: #333;
-line-height: 60px;
+line-height: 70px;
 }
   
 .el-aside {
